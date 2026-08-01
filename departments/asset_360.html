@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HAMS - Asset 360</title><link rel="stylesheet" href="../css/dept_layout.css">
+<style>
+.hero{display:grid;grid-template-columns:180px 1fr;gap:22px}.hero img{width:180px;height:180px;object-fit:cover;border-radius:14px;border:1px solid var(--color-line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.field{padding:12px;background:var(--color-bg);border-radius:10px}.field b{display:block;font-size:11px;color:var(--color-muted);margin-bottom:5px}.timeline{border-left:3px solid #dbe5ef;padding-left:18px}.event{padding:12px 0;border-bottom:1px solid var(--color-line)}.pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#e8f0ff;font-size:11px;font-weight:700}
+</style></head><body>
+<aside class="sidebar"><div class="sidebar-brand"><img class="logo-mark" src="../images/logo.svg"><span class="title">HAMS</span></div><div class="dept-chip">ASSET 360°</div>
+<nav><button class="nav-item active" onclick="history.back()">← Back</button><button class="nav-item" onclick="location.href='asset_inspection.html'">🔍 Asset Inspection</button><button class="nav-item" onclick="location.href='fault_tracking.html'">⚠️ Fault Tracking</button><button class="nav-item" onclick="location.href='reports.html'">📊 Reports</button><button class="nav-item" onclick="location.href='audit_history.html'">🧾 Audit History</button></nav>
+<div class="sidebar-footer"><button class="nav-item" onclick="location.href='department_dashboard.html'">⌂ Department Home</button><button class="nav-item" onclick="logout()">↪ Logout</button></div></aside>
+<main class="main"><div class="topbar"><div><h1 id="title">Asset 360°</h1><p>Complete asset profile, inspection history, issues and duty trail.</p></div><div><button class="btn btn-secondary" onclick="print()">🖨 Print</button></div></div>
+<div class="content-card"><div class="hero"><img id="photo" src="../images/no-image.png"><div><h2 id="name">—</h2><p id="idline" style="color:var(--color-muted)">—</p><div id="summary" class="grid" style="margin-top:14px"></div></div></div></div>
+<div class="content-card"><h3>Asset Information</h3><div id="fields" class="grid"></div></div>
+<div class="content-card"><h3>Inspection History</h3><div id="inspections" class="timeline"></div></div>
+<div class="content-card"><h3>Fault / Maintenance Issues</h3><div id="issues"></div></div>
+<div class="content-card"><h3>Duty History</h3><div id="duties"></div></div>
+</main>
+<script src="../js/auth.js"></script><script src="../js/hams_core.js"></script>
+<script>
+const id=new URLSearchParams(location.search).get("assetID"),a=hamsAsset(id);
+function esc(v){return String(v??"—").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function field(k,v){return `<div class="field"><b>${esc(k)}</b>${esc(v||"—")}</div>`}
+function render(){
+ if(!a){document.getElementById("name").textContent="Asset not found";return}
+ document.getElementById("photo").src=a.photo||"../images/no-image.png";document.getElementById("name").textContent=a.assetName||"Unnamed Asset";document.getElementById("idline").textContent=a.assetID||"";
+ const latest=hamsLatestInspection(id), issues=hamsGetIssues().filter(x=>x.assetID===id), duties=hamsGetDuties().filter(x=>x.assetID===id);
+ document.getElementById("summary").innerHTML=field("Status",a.status||"Working")+field("Verification",a.verified?"Verified":"Not Verified")+field("Last Inspection",latest?new Date(latest.date).toLocaleDateString():"Never")+field("Open Issues",issues.filter(x=>x.status!=="Closed").length);
+ const keys=[["Asset ID","assetID"],["Asset Name","assetName"],["Manufacturer","manufacturer"],["Model","model"],["Serial Number","serial"],["Category","category"],["Sub Category","subcategory"],["Division","division"],["Block","block"],["Section","section"],["Location","location"],["Sub Location","subLocation"],["Department","department"],["Work Department","workDepartment"],["Asset Type","assetType"],["Custodian","custodian"],["Used By","usedBy"],["Purchase Date","purchaseDate"],["Purchase Value","purchaseValue"],["Warranty","warranty"],["Status","status"]];
+ document.getElementById("fields").innerHTML=keys.map(k=>field(k[0],a[k[1]])).join("");
+ const ins=hamsInspectionsFor(id);document.getElementById("inspections").innerHTML=ins.length?ins.map(x=>`<div class="event"><span class="pill">${esc(x.condition||x.result||"Inspection")}</span> <b>${new Date(x.date).toLocaleString()}</b><br><small>By: ${esc(x.inspectedBy||x.completedBy||"—")} · ${esc(x.inspectionType||"Inspection")}</small><br>${esc(x.notes||x.remarks||"No remarks")}</div>`).join(""):"<p>No inspection history.</p>";
+ document.getElementById("issues").innerHTML=issues.length?issues.map(x=>`<div class="event"><span class="pill">${esc(x.status)}</span> <b>${esc(x.title||"Fault / Issue")}</b><br><small>${new Date(x.createdAt).toLocaleString()} · Reported by ${esc(x.reportedBy||"—")}</small><br>${esc(x.description||"")}</div>`).join(""):"<p>No issues recorded.</p>";
+ document.getElementById("duties").innerHTML=duties.length?duties.map(x=>`<div class="event"><span class="pill">${esc(x.status)}</span> <b>${esc(x.dutyType)}</b><br><small>Assigned to ${esc(x.employeeName||x.employeeID||"—")} · Due ${esc(x.dueDate||"—")}</small><br>${esc(x.remarks||x.instructions||"")}</div>`).join(""):"<p>No duty history.</p>";
+}
+render();hamsAudit("Viewed Asset 360","Asset",id||"","");
+</script></body></html>

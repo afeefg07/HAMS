@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>HAMS - My Duties</title><link rel="stylesheet" href="../css/dept_layout.css">
+<style>
+.content-card{background:#fff;border:1px solid var(--color-line);border-radius:16px;padding:22px;margin-bottom:20px}.status{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:700}.pending{background:#fff3cd;color:#856404}.progress{background:#e8f0ff;color:#174a8b}.complete{background:#e6f6ed;color:#177245}.overdue{background:#fde7e7;color:#9d2020}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(9,26,45,.5);z-index:50;align-items:center;justify-content:center;padding:20px}.modal-overlay.open{display:flex}.modal-box{width:min(700px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:16px;padding:24px}.modal-box label{display:block;font-size:12px;font-weight:700;margin:12px 0 6px}.modal-box select,.modal-box textarea{width:100%;padding:10px;border:1px solid var(--color-line);border-radius:8px}.modal-box textarea{min-height:90px}.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.check{display:flex;justify-content:space-between;gap:12px;padding:10px;background:var(--color-bg);border:1px solid var(--color-line);border-radius:9px;margin:8px 0}.check select{width:120px}
+</style></head>
+<body>
+<aside class="sidebar"><div class="sidebar-brand"><img class="logo-mark" src="../images/logo.svg"><span class="title">HAMS</span></div><div class="dept-chip" id="deptChip">MY DUTIES</div>
+<nav>
+<button class="nav-item active" onclick="location.href='my_duties.html'">✓ My Duties</button>
+<button class="nav-item" onclick="location.href='notifications.html'">🔔 Notifications <span id="badge" style="display:none;background:#d9363e;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:auto">0</span></button>
+<button class="nav-item" onclick="location.href='assign_duty.html?scope=all'">📋 Assign Duty</button>
+<button class="nav-item" onclick="location.href='asset_inspection.html'">🔍 Asset Inspection</button>
+</nav>
+<div class="sidebar-footer"><button class="nav-item" onclick="location.href='department_dashboard.html'">⌂ Department Home</button><button class="nav-item" onclick="logout()">↪ Logout</button></div></aside>
+<main class="main"><div class="topbar"><div><h1>My Duties</h1><p>Work assigned to you in HAMS.</p></div><button class="btn btn-secondary" onclick="location.href='notifications.html'">🔔 Notifications <span id="topBadge"></span></button></div>
+<div class="content-card"><div class="table-wrap"><table class="styled-table"><thead><tr><th>Asset</th><th>Duty</th><th>Assigned By</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody id="dutyTable"></tbody></table></div></div></main>
+
+<div class="modal-overlay" id="dutyModal"><div class="modal-box"><h3 id="modalTitle">Complete Duty</h3><p id="modalSub" style="color:var(--color-muted);font-size:13px"></p>
+<div id="instructions" style="padding:12px;background:var(--color-bg);border-radius:9px;font-size:13px;margin:14px 0"></div>
+<div class="check"><span>Asset physically available?</span><select id="present"><option>Yes</option><option>No</option></select></div>
+<div class="check"><span>Correct location?</span><select id="locationOk"><option>Yes</option><option>No</option></select></div>
+<div class="check"><span>Identification correct?</span><select id="identityOk"><option>Yes</option><option>No</option></select></div>
+<div class="check"><span>Working normally?</span><select id="workingOk"><option>Yes</option><option>No</option></select></div>
+<div class="check"><span>Physical damage?</span><select id="damage"><option>No</option><option>Yes</option></select></div>
+<div class="check"><span>Fault / issue found?</span><select id="fault"><option>No</option><option>Yes</option></select></div>
+<label>Result</label><select id="result"><option>Pass - No Fault</option><option>Needs Attention</option><option>Fault Found</option><option>Asset Not Found</option></select>
+<label>Evidence Photo (optional)</label><input type="file" id="evidencePhoto" accept="image/*" style="width:100%;padding:9px;border:1px solid var(--color-line);border-radius:8px"><label>Employee Remarks</label><textarea id="remarks" placeholder="Write your findings..."></textarea>
+<div class="modal-actions"><button class="btn btn-secondary" onclick="closeDuty()">Cancel</button><button class="btn btn-primary" onclick="submitDuty()">✓ Submit Duty</button></div>
+</div></div>
+
+<script src="../js/auth.js"></script><script src="../js/department_store.js"></script><script src="../js/hams_duty.js"></script>
+<script>
+let selectedDutyID=null;
+function esc(v){return String(v??"—").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function render(){
+ const id=localStorage.getItem("EmployeeID");const duties=getDuties().filter(d=>d.employeeID===id);const tb=document.getElementById("dutyTable");tb.innerHTML="";
+ if(!duties.length){tb.innerHTML='<tr class="empty-row"><td colspan="6">No duties assigned to you.</td></tr>';return;}
+ duties.forEach(d=>{
+   let st=d.status,cl=st==="Completed"?"complete":st==="In Progress"?"progress":"pending";
+   if(st!=="Completed"&&d.dueDate&&new Date(d.dueDate+"T23:59:59")<new Date()){st="Overdue";cl="overdue";}
+   tb.innerHTML+=`<tr><td><b>${esc(d.assetID)}</b><br><span style="font-size:12px">${esc(d.assetName)}</span></td><td>${esc(d.dutyType)}</td><td>${esc(d.assignedBy)}</td><td>${esc(d.dueDate||"—")}</td><td><span class="status ${cl}">${st}</span></td><td>${d.status==="Completed"?'<span style="font-size:12px;color:var(--color-muted)">Submitted</span>':`<button class="btn btn-primary" style="padding:7px 12px;font-size:12px" onclick="startDuty('${esc(d.dutyID)}')">${d.status==="In Progress"?"Continue":"Start"}</button>`}</td></tr>`;
+ });
+}
+function startDuty(id){
+ const d=getDuties().find(x=>x.dutyID===id);if(!d)return;selectedDutyID=id;
+ d.status="In Progress";saveDuties(getDuties());
+ document.getElementById("modalTitle").textContent=d.dutyType;
+ document.getElementById("modalSub").textContent=d.assetName+" ("+d.assetID+") · "+d.location;
+ document.getElementById("instructions").innerHTML="<b>Instructions:</b> "+esc(d.instructions||"No special instructions.");
+ document.getElementById("remarks").value="";if(document.getElementById("evidencePhoto"))document.getElementById("evidencePhoto").value="";document.getElementById("dutyModal").classList.add("open");render();
+}
+function readEvidencePhoto(){
+ return new Promise(resolve=>{
+  const f=document.getElementById("evidencePhoto")?.files?.[0]; if(!f)return resolve("");
+  const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>resolve("");r.readAsDataURL(f);
+ });
+}
+async function submitDuty(){
+ const list=getDuties();const i=list.findIndex(x=>x.dutyID===selectedDutyID);if(i<0)return;
+ const d=list[i];d.status="Completed";d.completedAt=new Date().toISOString();d.completedBy=localStorage.getItem("Employee")||"Unknown";
+ d.result=document.getElementById("result").value;d.checks={assetPresent:document.getElementById("present").value,correctLocation:document.getElementById("locationOk").value,identificationCorrect:document.getElementById("identityOk").value,workingNormally:document.getElementById("workingOk").value,physicalDamage:document.getElementById("damage").value,faultFound:document.getElementById("fault").value};d.remarks=document.getElementById("remarks").value.trim();
+ d.evidencePhoto=await readEvidencePhoto();
+ d.employeeID=localStorage.getItem("EmployeeID")||"";
+ saveDuties(list);
+ const audit=JSON.parse(localStorage.getItem("HAMS_AuditLog")||"[]");audit.unshift({auditID:"AUD-"+Date.now(),timestamp:new Date().toISOString(),user:d.completedBy,employeeID:d.employeeID,role:localStorage.getItem("Role")||"",action:"Completed Duty",entityType:"Duty",entityID:d.dutyID,details:d.assetID+" · "+d.result});localStorage.setItem("HAMS_AuditLog",JSON.stringify(audit));
+ if(d.checks.faultFound==="Yes" || d.checks.physicalDamage==="Yes"){
+  const issues=JSON.parse(localStorage.getItem("HAMS_Issues")||"[]");issues.unshift({issueID:"ISS-"+Date.now(),assetID:d.assetID,assetName:d.assetName,title:"Fault found during inspection",description:d.remarks||"Fault/damage reported during duty.",status:"Open",reportedBy:d.completedBy,createdAt:new Date().toISOString(),sourceDutyID:d.dutyID});localStorage.setItem("HAMS_Issues",JSON.stringify(issues));
+ }
+
+ const notes=getNotifications();notes.unshift({notificationID:"NOT-"+Date.now(),employeeID:d.assignedByEmployeeID||"",type:"duty_completed",title:"Duty Completed",message:`${d.dutyType} completed for ${d.assetName} (${d.assetID})`,dutyID:d.dutyID,createdAt:new Date().toISOString(),read:false});
+ // Only keep the completion notification when a recipient employee ID exists.
+ if(d.assignedByEmployeeID) saveNotifications(notes);
+ closeDuty();render();alert("Duty completed successfully.");
+}
+function closeDuty(){document.getElementById("dutyModal").classList.remove("open");selectedDutyID=null;}
+const dutyParam=new URLSearchParams(location.search).get("duty");
+renderNotificationBadge("badge");renderNotificationBadge("topBadge");render();
+if(dutyParam){setTimeout(()=>startDuty(dutyParam),100);}
+</script></body></html>

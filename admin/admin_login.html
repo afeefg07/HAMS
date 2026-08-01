@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Administrator Login</title>
+
+<link rel="stylesheet" href="../css/login.css">
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+<div class="login-box">
+
+<span class="corner corner-tl"></span>
+<span class="corner corner-tr"></span>
+<span class="corner corner-bl"></span>
+<span class="corner corner-br"></span>
+
+<img class="logo" src="../images/logo.svg" alt="HAMS Logo">
+
+<div class="brand-wordmark">HAMS · ADMIN</div>
+
+<h1>Administrator Login</h1>
+
+<p>Restricted access</p>
+
+<label>Username</label>
+
+<input
+type="text"
+id="username"
+placeholder="Enter Username">
+
+<label>Password</label>
+
+<input
+type="password"
+id="password"
+placeholder="Enter Password">
+
+<button onclick="login()">
+
+Log In
+
+</button>
+
+<button class="back-btn" onclick="history.back()">
+
+⬅ Back
+
+</button>
+
+<p id="error"></p>
+
+</div>
+
+</div>
+
+<script>
+
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "admin123";
+
+function login(){
+
+    let username = document.getElementById("username").value.trim();
+
+    let password = document.getElementById("password").value.trim();
+
+    if(username === ADMIN_USERNAME && password === ADMIN_PASSWORD){
+
+        localStorage.setItem("AdminLoggedIn","true");
+
+        window.location.href="admin_dashboard.html";
+
+    }
+    else{
+
+        document.getElementById("error").innerHTML="❌ Invalid Username or Password";
+
+    }
+
+}
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key==="Enter"){
+
+        login();
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

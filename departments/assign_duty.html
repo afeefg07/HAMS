@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>HAMS - Assign Duty</title>
+<link rel="stylesheet" href="../css/dept_layout.css">
+<style>
+.content-card{background:#fff;border:1px solid var(--color-line);border-radius:16px;padding:22px;margin-bottom:20px;box-shadow:0 5px 18px rgba(15,42,74,.05)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.toolbar input,.toolbar select{max-width:260px}
+.status{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:700}
+.s-pending{background:#fff3cd;color:#856404}.s-progress{background:#e8f0ff;color:#174a8b}.s-complete{background:#e6f6ed;color:#177245}.s-overdue{background:#fde7e7;color:#9d2020}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(9,26,45,.5);z-index:50;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}.modal-box{width:min(720px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:16px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+.modal-box h3{margin:0 0 5px}.modal-sub{color:var(--color-muted);font-size:13px;margin:0 0 18px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.form-grid .full{grid-column:1/-1}
+.modal-box label{display:block;font-size:12px;font-weight:700;margin:10px 0 6px}.modal-box input,.modal-box select,.modal-box textarea{width:100%;padding:10px;border:1px solid var(--color-line);border-radius:8px;background:#fff}.modal-box textarea{min-height:90px;resize:vertical}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.check-grid{display:grid;gap:9px}.check{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--color-line);border-radius:9px;background:var(--color-bg)}.check select{width:125px}
+@media(max-width:800px){.form-grid{grid-template-columns:1fr}.form-grid .full{grid-column:auto}.table-wrap{overflow:auto}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+<div class="sidebar-brand"><img class="logo-mark" src="../images/logo.svg"><span class="title">HAMS</span></div>
+<div class="dept-chip">ASSIGN DUTY</div>
+<nav>
+<button class="nav-item active" onclick="location.href='assign_duty.html?scope=all'">📋 Assign Duty</button>
+<button class="nav-item" onclick="location.href='my_duties.html'">✓ My Duties</button>
+<button class="nav-item" onclick="location.href='notifications.html'">🔔 Notifications <span id="navBadge" style="display:none;background:#d9363e;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:auto">0</span></button>
+<button class="nav-item" onclick="location.href='asset_inspection.html?scope=all'">🔍 Asset Inspection</button>
+<button class="nav-item" onclick="location.href='asset_verify.html?scope=all'">✓ Verify Asset</button>
+</nav>
+<div class="sidebar-footer">
+<button class="nav-item" onclick="location.href='../dashboard.html'">⌂ Main Dashboard</button>
+<button class="nav-item" onclick="logout()">↪ Logout</button>
+</div>
+</aside>
+
+<main class="main">
+<div class="topbar">
+<div><h1>Assign Duty</h1><p>Assign asset-related work to employees and track completion.</p></div>
+<div style="display:flex;gap:8px">
+<button class="btn btn-secondary" onclick="location.href='notifications.html'">🔔 Notifications <span id="topBadge"></span></button>
+<button class="btn btn-primary" onclick="location.href='my_duties.html'">✓ My Duties</button>
+</div>
+</div>
+
+<div class="content-card">
+<div class="toolbar">
+<input id="search" placeholder="🔍 Search asset ID, name, serial...">
+<select id="deptFilter"><option value="">All Departments</option></select>
+<select id="statusFilter"><option value="">All Status</option><option>Unassigned</option><option>Pending</option><option>In Progress</option><option>Completed</option><option>Overdue</option></select>
+</div>
+</div>
+
+<div class="content-card">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap">
+<h3 style="margin:0">All Assets</h3>
+<span id="assetCount" style="font-size:12px;color:var(--color-muted)">0 assets</span>
+</div>
+<div class="table-wrap">
+<table class="styled-table">
+<thead><tr><th>Asset ID</th><th>Asset</th><th>Department</th><th>Location</th><th>Verification</th><th>Duty</th><th>Actions</th></tr></thead>
+<tbody id="assetTable"></tbody>
+</table>
+</div>
+</div>
+</main>
+
+<!-- View/Verify -->
+<div class="modal-overlay" id="verifyModal"><div class="modal-box">
+<h3>Asset Verification / Duty Check</h3><p class="modal-sub" id="verifyTitle"></p>
+<div class="form-grid">
+<div><label>Asset ID</label><input id="vAssetID" readonly></div>
+<div><label>Asset Name</label><input id="vAssetName" readonly></div>
+<div><label>Department</label><input id="vDepartment" readonly></div>
+<div><label>Location</label><input id="vLocation" readonly></div>
+<div><label>Asset Physically Available?</label><select id="vPresent"><option>Yes</option><option>No</option></select></div>
+<div><label>Correct Location?</label><select id="vCorrectLocation"><option>Yes</option><option>No</option></select></div>
+<div><label>Asset ID / Tag Correct?</label><select id="vTag"><option>Yes</option><option>No</option></select></div>
+<div><label>Serial Number Matches?</label><select id="vSerial"><option>Yes</option><option>No</option></select></div>
+<div><label>Condition</label><select id="vCondition"><option>Good</option><option>Fair</option><option>Damaged</option></select></div>
+<div><label>Working Condition</label><select id="vWorking"><option>Working</option><option>Not Working</option></select></div>
+<div><label>Fault Found?</label><select id="vFault"><option>No</option><option>Yes</option></select></div>
+<div class="full"><label>Remarks</label><textarea id="vRemarks" placeholder="Employee can record observations..."></textarea></div>
+</div>
+<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('verifyModal')">Cancel</button><button class="btn btn-primary" onclick="saveVerification()">✓ Submit Verification</button></div>
+</div></div>
+
+<!-- Assign -->
+<div class="modal-overlay" id="assignModal"><div class="modal-box">
+<h3>Assign Duty</h3><p class="modal-sub" id="assignTitle"></p>
+<div class="form-grid">
+<div class="full"><label>Assign To Employee *</label><select id="employeeSelect"></select></div>
+<div><label>Duty Type *</label><select id="dutyType"><option>Asset Verification</option><option>Asset Inspection</option><option>Location Check</option><option>Condition Check</option><option>Other</option></select></div>
+<div><label>Due Date *</label><input type="date" id="dueDate"></div>
+<div class="full"><label>Instructions</label><textarea id="dutyInstructions" placeholder="Tell the employee exactly what to do..."></textarea></div>
+</div>
+<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('assignModal')">Cancel</button><button class="btn btn-primary" onclick="saveDuty()">📋 Assign Duty</button></div>
+</div></div>
+
+<!-- Inspect -->
+<div class="modal-overlay" id="inspectModal"><div class="modal-box">
+<h3>Asset Inspection</h3><p class="modal-sub" id="inspectTitle"></p>
+<div class="check-grid">
+<div class="check"><span>Asset physically present?</span><select id="iPresent"><option>Yes</option><option>No</option></select></div>
+<div class="check"><span>Correct location?</span><select id="iLocation"><option>Yes</option><option>No</option></select></div>
+<div class="check"><span>Identification correct?</span><select id="iIdentity"><option>Yes</option><option>No</option></select></div>
+<div class="check"><span>Working normally?</span><select id="iWorking"><option>Yes</option><option>No</option></select></div>
+<div class="check"><span>Physical damage?</span><select id="iDamage"><option>No</option><option>Yes</option></select></div>
+<div class="check"><span>Fault / issue found?</span><select id="iFault"><option>No</option><option>Yes</option></select></div>
+</div>
+<label>Result</label><select id="iResult"><option>Pass</option><option>Needs Attention</option><option>Fail</option><option>Asset Not Found</option></select>
+<label>Notes</label><textarea id="iNotes"></textarea>
+<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('inspectModal')">Cancel</button><button class="btn btn-primary" onclick="saveInspection()">✓ Save Inspection</button></div>
+</div></div>
+
+<script src="../js/auth.js"></script><script src="../js/hams_core.js"></script>
+<script src="../js/hams_data_counts.js"></script>
+<script src="../js/department_store.js"></script>
+<script src="../js/hams_duty.js"></script>
+<script>
+if(localStorage.getItem("EmployeeID")==="") localStorage.removeItem("EmployeeID");
+let selectedAssetID = null;
+
+function esc(v){return String(v??"—").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function employees(){return JSON.parse(localStorage.getItem("Employees"))||[];}
+function assets(){return JSON.parse(localStorage.getItem("Assets") || "[]");}
+function activeDuty(assetID){return getDuties().filter(d=>d.assetID===assetID && !["Completed","Cancelled"].includes(d.status)).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt))[0];}
+function statusOf(d){
+ if(!d)return ["Unassigned",""];
+ if(d.status==="Completed")return ["Completed","s-complete"];
+ if(d.status==="In Progress")return ["In Progress","s-progress"];
+ if(d.dueDate && new Date(d.dueDate+"T23:59:59")<new Date())return ["Overdue","s-overdue"];
+ return ["Pending","s-pending"];
+}
+function load(){
+ const q=document.getElementById("search").value.toLowerCase().trim();
+ const df=document.getElementById("deptFilter").value;
+ const sf=document.getElementById("statusFilter").value;
+ let list=assets().filter(a=>!q || [a.assetID,a.assetName,a.serial,a.model,a.location,a.department].join(" ").toLowerCase().includes(q));
+ if(df) list=list.filter(a=>a.departmentKey===df || a.workDepartment===getDepartment(df).code);
+ list=list.filter(a=>{const [s]=statusOf(activeDuty(a.assetID));return !sf||s===sf});
+ const tb=document.getElementById("assetTable");tb.innerHTML="";
+ document.getElementById("assetCount").textContent=list.length+" asset"+(list.length===1?"":"s");
+ if(!list.length){tb.innerHTML='<tr class="empty-row"><td colspan="7">No assets found.</td></tr>';return;}
+ list.forEach(a=>{
+   const d=activeDuty(a.assetID), [st,cl]=statusOf(d);
+   tb.innerHTML+=`<tr>
+   <td><b>${esc(a.assetID)}</b></td><td>${esc(a.assetName)}</td>
+   <td>${esc(a.department||getDepartment(a.departmentKey).name)}</td><td>${esc(a.location||"—")}</td>
+   <td>${a.verified?'🟢 Verified':'🟡 Pending'}</td>
+   <td><span class="status ${cl}">${st}</span>${d?`<div style="font-size:11px;color:var(--color-muted);margin-top:4px">${esc(d.employeeName)} · ${esc(d.dutyType)}</div>`:""}</td>
+   <td><div style="display:flex;gap:6px;flex-wrap:wrap">
+   <button class="btn-icon" title="Verify" onclick="openVerify('${esc(a.assetID)}')">✓</button>
+   <button class="btn-icon" title="Edit" onclick="editAsset('${esc(a.assetID)}')">✏️</button>
+   <button class="btn-icon" title="Inspect" onclick="openInspect('${esc(a.assetID)}')">🔍</button>
+   <button class="btn btn-primary" style="padding:7px 10px;font-size:11px" onclick="openAssign('${esc(a.assetID)}')">Assign Duty</button>
+   </div></td></tr>`;
+ });
+}
+function editAsset(id){
+ const a=assets();const i=a.findIndex(x=>x.assetID===id);if(i<0)return;
+ localStorage.setItem("SelectedAsset",String(i));location.href="edit_asset.html";
+}
+function openVerify(id){
+ const a=assets().find(x=>x.assetID===id);if(!a)return;selectedAssetID=id;
+ document.getElementById("verifyTitle").textContent=a.assetName+" ("+a.assetID+")";
+ [["vAssetID",a.assetID],["vAssetName",a.assetName],["vDepartment",a.department||getDepartment(a.departmentKey).name],["vLocation",a.location||"—"]].forEach(([id,v])=>document.getElementById(id).value=v||"—");
+ document.getElementById("vRemarks").value="";document.getElementById("verifyModal").classList.add("open");
+}
+function saveVerification(){
+ const a=assets();const i=a.findIndex(x=>x.assetID===selectedAssetID);if(i<0)return;
+ const now=new Date().toISOString();const emp=localStorage.getItem("Employee")||"Unknown";
+ a[i].verified=true;a[i].verifiedBy=emp;a[i].verifiedEmployeeID=localStorage.getItem("EmployeeID")||"";a[i].verifiedDate=now;
+ a[i].verificationDetails={
+  present:document.getElementById("vPresent").value,correctLocation:document.getElementById("vCorrectLocation").value,
+  tagCorrect:document.getElementById("vTag").value,serialMatches:document.getElementById("vSerial").value,
+  condition:document.getElementById("vCondition").value,working:document.getElementById("vWorking").value,
+  faultFound:document.getElementById("vFault").value,remarks:document.getElementById("vRemarks").value.trim()
+ };
+ localStorage.setItem("Assets",JSON.stringify(a));closeModal("verifyModal");load();alert("Asset verification saved.");
+}
+function openAssign(id){
+ const a=assets().find(x=>x.assetID===id);if(!a)return;selectedAssetID=id;
+ document.getElementById("assignTitle").textContent=a.assetName+" ("+a.assetID+")";
+ const sel=document.getElementById("employeeSelect");sel.innerHTML='<option value="">Select employee</option>';
+ employees().filter(e=>e.status==="Active").forEach(e=>{const o=document.createElement("option");o.value=e.employeeID;o.textContent=e.employeeName+" — "+e.employeeID+" — "+e.department;sel.appendChild(o);});
+ const due=new Date();due.setDate(due.getDate()+7);document.getElementById("dueDate").value=due.toISOString().slice(0,10);document.getElementById("dutyInstructions").value="";
+ document.getElementById("assignModal").classList.add("open");
+}
+function saveDuty(){
+ const id=document.getElementById("employeeSelect").value;if(!id){alert("Select an employee.");return;}
+ const emp=employees().find(e=>e.employeeID===id);const a=assets().find(x=>x.assetID===selectedAssetID);if(!a)return;
+ const duty={dutyID:"DUTY-"+Date.now(),assetID:a.assetID,assetName:a.assetName,departmentKey:a.departmentKey||"",location:a.location||"",employeeID:emp.employeeID,employeeName:emp.employeeName,dutyType:document.getElementById("dutyType").value,dueDate:document.getElementById("dueDate").value,instructions:document.getElementById("dutyInstructions").value.trim(),assignedBy:localStorage.getItem("Employee")||"Administrator",assignedByEmployeeID:localStorage.getItem("EmployeeID")||"",createdAt:new Date().toISOString(),status:"Pending"};
+ const list=getDuties();list.unshift(duty);saveDuties(list); hamsAudit('Assigned Duty','Duty',d.dutyID,d.assetID+' · '+d.dutyType+' · '+d.employeeID);createDutyNotification(duty);closeModal("assignModal");load();alert("Duty assigned to "+emp.employeeName+". A notification has been added to their HAMS inbox.");
+}
+function openInspect(id){
+ const a=assets().find(x=>x.assetID===id);if(!a)return;selectedAssetID=id;
+ document.getElementById("inspectTitle").textContent=a.assetName+" ("+a.assetID+")";
+ document.getElementById("iNotes").value="";document.getElementById("inspectModal").classList.add("open");
+}
+function saveInspection(){
+ const empID=localStorage.getItem("EmployeeID")||"";const emp=localStorage.getItem("Employee")||"Unknown";
+ const result=document.getElementById("iResult").value;const now=new Date().toISOString();
+ const list=JSON.parse(localStorage.getItem("Inspections"))||[];
+ list.push({inspectionID:"INSP-"+Date.now(),assetID:selectedAssetID,date:now,inspectedBy:emp,inspectedEmployeeID:empID,condition:result,departmentKey:localStorage.getItem("CurrentDepartment")||"",checks:{assetPresent:document.getElementById("iPresent").value,correctLocation:document.getElementById("iLocation").value,identificationCorrect:document.getElementById("iIdentity").value,workingNormally:document.getElementById("iWorking").value,physicalDamage:document.getElementById("iDamage").value,faultFound:document.getElementById("iFault").value},notes:document.getElementById("iNotes").value.trim()});
+ localStorage.setItem("Inspections",JSON.stringify(list));closeModal("inspectModal");load();alert("Inspection saved.");
+}
+function closeModal(id){document.getElementById(id).classList.remove("open");selectedAssetID=null;}
+getDepartments().forEach(d=>{const o=document.createElement("option");o.value=d.key;o.textContent=d.name;document.getElementById("deptFilter").appendChild(o);});
+["search","deptFilter","statusFilter"].forEach(id=>document.getElementById(id).addEventListener("input",load));
+renderNotificationBadge("navBadge");renderNotificationBadge("topBadge");load();
+</script>
+
+<script>
+(function(){
+  function refreshDutyAssetCount(){
+    const assets = JSON.parse(localStorage.getItem("Assets") || "[]");
+    const el=document.getElementById("assetCount");
+    if(el) el.textContent=assets.length+" asset"+(assets.length===1?"":"s");
+  }
+  refreshDutyAssetCount();
+  window.addEventListener("storage", refreshDutyAssetCount);
+})();
+</script>
+
+</body>
+</html>

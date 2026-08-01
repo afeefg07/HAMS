@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Department Dashboard</title>
+
+<link rel="stylesheet" href="../css/department_dashboard.css">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="sidebar-brand">
+<img class="logo-mark" src="../images/logo.svg" alt="HAMS Logo">
+<span class="title">HAMS</span>
+</div>
+
+<div class="dept-chip" id="deptChip"></div>
+
+<nav>
+
+<button class="nav-item" onclick="location.href='asset_registration.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+Asset Registration
+</button>
+
+<button class="nav-item" onclick="location.href='asset_tracking.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+Asset Tracking
+</button>
+
+<button class="nav-item" onclick="location.href='my_duties.html'">
+✓ My Duties
+</button>
+
+<button class="nav-item" onclick="location.href='notifications.html'">
+🔔 Notifications <span id="dashNotifBadge" style="display:none;background:#d9363e;color:#fff;border-radius:10px;padding:1px 6px;font-size:10px;margin-left:auto">0</span>
+</button>
+
+<button class="nav-item" onclick="location.href='asset_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+Asset Inspection
+</button>
+<button class="nav-item" onclick="location.href='reverse_asset_inspection.html'">↩️ Reverse Asset Inspection</button>
+
+<button class="nav-item" onclick="location.href='asset_verify.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M14 20h3M20 14v3M20 20v.01"/></svg>
+Verify Asset
+</button>
+
+<button class="nav-item" onclick="location.href='location_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="11" r="2.4"/></svg>
+Location Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_utilization.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+Asset Utilization
+</button>
+
+</nav>
+
+<button class="nav-item" onclick="location.href='asset_360.html'">◉ Asset 360°</button><button class="nav-item" onclick="location.href='fault_tracking.html'">⚠️ Fault Tracking</button><button class="nav-item" onclick="location.href='reports.html'">📊 Reports</button><button class="nav-item" onclick="location.href='audit_history.html'">🧾 Audit History</button><div class="sidebar-footer">
+
+<button class="nav-item" onclick="location.href='../dashboard.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+Main Dashboard
+</button>
+
+<button class="nav-item" onclick="logout()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+Logout
+</button>
+
+</div>
+
+</aside>
+
+<main class="main">
+
+<div class="topbar">
+
+<div>
+<h1 id="departmentName"></h1>
+<p>Welcome back, <b id="employeeName"></b></p>
+</div>
+
+<div class="search-box">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+<input type="text" id="searchInput" placeholder="Search assets...">
+</div>
+
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<div class="stat-icon total">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.3"/><rect x="14" y="3" width="7" height="7" rx="1.3"/><rect x="3" y="14" width="7" height="7" rx="1.3"/><rect x="14" y="14" width="7" height="7" rx="1.3"/></svg>
+</div>
+<div class="stat-label">Total Assets</div>
+<div class="stat-value" id="statTotal">0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-icon working">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+</div>
+<div class="stat-label">Working</div>
+<div class="stat-value" id="statWorking">0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-icon repair">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.1-3.1a4 4 0 01-5.4 5.4L6.5 20.5a1.5 1.5 0 01-2.1-2.1L13.3 9.5a4 4 0 015.4-5.4l-3.1 3.1z"/></svg>
+</div>
+<div class="stat-label">Under Repair</div>
+<div class="stat-value" id="statRepair">0</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-icon condemned">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
+</div>
+<div class="stat-label">Condemned</div>
+<div class="stat-value" id="statCondemned">0</div>
+</div>
+
+</div>
+
+<div class="section-heading">Quick Actions</div>
+
+<div class="actions-grid">
+
+<button class="action-card" onclick="location.href='asset_registration.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+<span>Register Asset</span>
+</button>
+
+<button class="action-card" onclick="location.href='asset_tracking.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+<span>Track Assets</span>
+</button>
+
+<button class="action-card" onclick="location.href='asset_verify.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M14 20h3M20 14v3M20 20v.01"/></svg>
+<span>Verify Asset</span>
+</button>
+
+<button class="action-card" onclick="comingSoon()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5h5M6 3h8l6 6v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z"/><path d="M9 15l2 2 4-4"/></svg>
+<span>Export Report</span>
+</button>
+
+</div>
+
+</main>
+
+<script src="../js/auth.js"></script>
+<script src="../js/hams_data_counts.js"></script>
+<script src="../js/department_store.js"></script>
+<script src="../js/hams_duty.js"></script>
+
+<script>
+
+const dept = localStorage.getItem("CurrentDepartment");
+
+const employee = localStorage.getItem("Employee");
+
+const currentDept = getDepartment(dept);
+
+document.getElementById("departmentName").textContent = currentDept.name + " Dashboard";
+document.getElementById("employeeName").textContent = employee || "Employee";
+document.getElementById("deptChip").textContent = currentDept.code + " · " + currentDept.name;
+
+// -----------------------------
+// Real Stats (from actual Assets data, no placeholder numbers)
+// -----------------------------
+function loadStats(){
+
+    const allAssets = JSON.parse(localStorage.getItem("Assets") || "[]");
+
+    const deptAssets = allAssets.filter(a => a.departmentKey === dept || a.workDepartment === currentDept.code);
+
+    const total = deptAssets.length;
+    const working = deptAssets.filter(a => a.status === "Working").length;
+    const repair = deptAssets.filter(a => a.status === "Under Repair").length;
+    const condemned = deptAssets.filter(a => a.status === "Condemned").length;
+
+    document.getElementById("statTotal").textContent = total;
+    document.getElementById("statWorking").textContent = working;
+    document.getElementById("statRepair").textContent = repair;
+    document.getElementById("statCondemned").textContent = condemned;
+
+}
+
+loadStats();
+renderNotificationBadge("dashNotifBadge");
+
+// -----------------------------
+// Search -> hands off to Asset Tracking with the keyword pre-filled
+// -----------------------------
+document.getElementById("searchInput").addEventListener("keydown", function(e){
+
+    if(e.key === "Enter"){
+
+        const keyword = this.value.trim();
+
+        if(keyword){
+            localStorage.setItem("PendingSearch", keyword);
+        }
+
+        window.location.href = "asset_tracking.html";
+
+    }
+
+});
+
+// -----------------------------
+// Placeholder for not-yet-built features
+// -----------------------------
+function comingSoon(){
+    alert("This feature isn't built yet. It's on the roadmap!");
+}
+
+</script>
+
+</body>
+</html>

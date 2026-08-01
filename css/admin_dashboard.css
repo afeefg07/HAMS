@@ -1,0 +1,256 @@
+/* ==========================================
+   HAMS - Admin Dashboard
+========================================== */
+
+@import url('theme.css');
+
+/* ==========================================
+   Header
+========================================== */
+
+header{
+
+    background:linear-gradient(135deg, var(--color-primary), var(--color-primary-2));
+    color:white;
+    padding:22px 48px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 4px 20px rgba(15,42,74,.25);
+
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.brand img.logo-mark{
+    width:34px;
+    height:34px;
+}
+
+header h1{
+    font-family:var(--font-display);
+    font-size:22px;
+    font-weight:600;
+    letter-spacing:-.01em;
+}
+
+.right{
+    display:flex;
+    align-items:center;
+    gap:16px;
+}
+
+.right span{
+    font-size:14px;
+    opacity:.92;
+}
+
+.right button{
+    font-family:var(--font-body);
+    font-weight:600;
+    font-size:13px;
+    background:rgba(255,255,255,.1);
+    color:white;
+    border:1px solid rgba(255,255,255,.35);
+    padding:9px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease;
+}
+
+.right button:hover{
+    background:rgba(255,255,255,.2);
+    border-color:rgba(255,255,255,.6);
+}
+
+.right button:focus-visible{
+    outline:2px solid var(--color-accent);
+    outline-offset:2px;
+}
+
+/* ==========================================
+   Container
+========================================== */
+
+.container{
+    width:92%;
+    max-width:1180px;
+    margin:0 auto;
+    padding:44px 0 70px;
+}
+
+/* ==========================================
+   Quick Stats
+========================================== */
+
+.stats-strip{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+    gap:16px;
+    margin-bottom:40px;
+}
+
+.stat-pill{
+    background:var(--color-surface);
+    border:1px solid var(--color-line);
+    border-radius:var(--radius);
+    padding:18px 20px;
+}
+
+.stat-pill .stat-label{
+    font-size:12.5px;
+    color:var(--color-muted);
+    margin-bottom:6px;
+}
+
+.stat-pill .stat-value{
+    font-family:var(--font-display);
+    font-size:26px;
+    font-weight:700;
+    color:var(--color-primary);
+}
+
+.page-heading{
+    margin-bottom:20px;
+}
+
+.page-heading h2{
+    font-family:var(--font-display);
+    font-size:22px;
+    font-weight:700;
+    color:var(--color-primary);
+}
+
+/* ==========================================
+   Cards Grid
+========================================== */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:20px;
+}
+
+.card{
+
+    position:relative;
+    background:var(--color-surface);
+    border:1px solid var(--color-line);
+    border-radius:var(--radius);
+    padding:26px 22px;
+    text-align:left;
+    cursor:pointer;
+    font-family:inherit;
+    color:inherit;
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    overflow:hidden;
+
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 14px 30px rgba(15,42,74,.14);
+    border-color:var(--color-accent);
+}
+
+.card:focus-visible{
+    outline:2px solid var(--color-accent);
+    outline-offset:3px;
+}
+
+.card:hover .corner{
+    border-color:var(--color-accent);
+    width:20px;
+    height:20px;
+}
+
+.card-icon{
+    width:36px;
+    height:36px;
+    color:var(--color-primary);
+    margin-bottom:14px;
+}
+
+.card-icon svg{
+    width:100%;
+    height:100%;
+}
+
+.card h2{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:600;
+    color:var(--color-ink);
+    margin-bottom:6px;
+}
+
+.card p{
+    font-size:13px;
+    color:var(--color-muted);
+    line-height:1.4;
+}
+
+.card .soon-tag{
+    position:absolute;
+    top:14px;
+    right:14px;
+    font-family:var(--font-mono);
+    font-size:9.5px;
+    letter-spacing:.05em;
+    background:var(--color-bg);
+    color:var(--color-muted);
+    border:1px solid var(--color-line);
+    padding:3px 7px;
+    border-radius:6px;
+}
+
+/* Danger card - visually distinct for destructive action */
+
+.card.danger{
+    background:#FDF3F1;
+    border-color:#F2C9C0;
+}
+
+.card.danger .card-icon{
+    color:var(--status-condemned);
+}
+
+.card.danger:hover{
+    border-color:var(--status-condemned);
+    box-shadow:0 14px 30px rgba(196,69,54,.15);
+}
+
+.card.danger:hover .corner{
+    border-color:var(--status-condemned);
+}
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width:640px){
+
+    header{
+        padding:18px 22px;
+        flex-direction:column;
+        gap:14px;
+        align-items:flex-start;
+    }
+
+    .container{
+        padding:32px 0 50px;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce){
+
+    .card:hover{
+        transform:none;
+    }
+
+}

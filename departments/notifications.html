@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>HAMS - Notifications</title><link rel="stylesheet" href="../css/dept_layout.css">
+<style>
+.content-card{background:#fff;border:1px solid var(--color-line);border-radius:16px;padding:22px}.notice{display:flex;gap:14px;padding:15px 4px;border-bottom:1px solid var(--color-line);cursor:pointer}.notice:last-child{border-bottom:0}.notice.unread{background:#f5f9ff;border-radius:10px;padding:15px}.dot{width:9px;height:9px;border-radius:50%;background:#d9363e;margin-top:7px;flex:none}.read .dot{background:#c9d1d9}.notice-title{font-weight:700;font-size:14px}.notice-message{font-size:13px;color:var(--color-muted);margin-top:4px}.notice-time{font-size:11px;color:var(--color-muted);margin-top:6px}
+</style></head>
+<body>
+<aside class="sidebar"><div class="sidebar-brand"><img class="logo-mark" src="../images/logo.svg"><span class="title">HAMS</span></div><div class="dept-chip">NOTIFICATIONS</div>
+<nav><button class="nav-item" onclick="location.href='my_duties.html'">✓ My Duties</button><button class="nav-item active" onclick="location.href='notifications.html'">🔔 Notifications</button><button class="nav-item" onclick="location.href='assign_duty.html?scope=all'">📋 Assign Duty</button><button class="nav-item" onclick="location.href='asset_inspection.html'">🔍 Asset Inspection</button></nav>
+<div class="sidebar-footer"><button class="nav-item" onclick="location.href='department_dashboard.html'">⌂ Department Home</button><button class="nav-item" onclick="logout()">↪ Logout</button></div></aside>
+<main class="main"><div class="topbar"><div><h1>Notifications</h1><p>New duties and HAMS activity assigned to you.</p></div><button class="btn btn-secondary" onclick="markAll()">✓ Mark all as read</button></div>
+<div class="content-card"><div id="list"></div></div></main>
+<script src="../js/auth.js"></script><script src="../js/hams_duty.js"></script>
+<script>
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function render(){
+ const id=localStorage.getItem("EmployeeID");const list=getNotifications().filter(n=>n.employeeID===id);const box=document.getElementById("list");box.innerHTML="";
+ if(!list.length){box.innerHTML='<div style="padding:30px;text-align:center;color:var(--color-muted)">No notifications.</div>';return;}
+ list.forEach(n=>{box.innerHTML+=`<div class="notice ${n.read?"read":"unread"}" onclick="openNotice('${esc(n.notificationID)}')"><div class="dot"></div><div><div class="notice-title">${esc(n.title)}</div><div class="notice-message">${esc(n.message)}</div><div class="notice-time">${new Date(n.createdAt).toLocaleString()}</div></div></div>`});
+}
+function openNotice(id){
+ const notes=getNotifications();const n=notes.find(x=>x.notificationID===id);if(!n)return;n.read=true;saveNotifications(notes);
+ if(n.dutyID){location.href="my_duties.html?duty="+encodeURIComponent(n.dutyID);return;}render();
+}
+function markAll(){const id=localStorage.getItem("EmployeeID");const notes=getNotifications();notes.forEach(n=>{if(n.employeeID===id)n.read=true});saveNotifications(notes);render();}
+render();
+</script></body></html>

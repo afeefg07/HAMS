@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HAMS - Import Data</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:#EEF2F7;padding:40px;}
+.box{max-width:600px;margin:0 auto;background:white;padding:30px;border-radius:14px;box-shadow:0 5px 20px rgba(0,0,0,.1);}
+h1{color:#0F2A4A;margin-bottom:10px;font-size:22px;}
+p{color:#5B6B7E;margin-bottom:20px;font-size:14px;}
+textarea{width:100%;height:200px;padding:12px;border:1px solid #DCE3EC;border-radius:8px;font-family:monospace;font-size:12px;resize:vertical;}
+button{margin-top:16px;width:100%;padding:14px;background:#0F2A4A;color:white;border:none;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer;}
+button:hover{background:#17456B;}
+.status{margin-top:14px;text-align:center;font-weight:bold;display:none;padding:12px;border-radius:8px;}
+.status.success{background:#E4F5EC;color:#1E8E5A;}
+.status.error{background:#FBE7E4;color:#C44536;}
+a.homeLink{display:block;text-align:center;margin-top:16px;color:#0F2A4A;font-weight:bold;text-decoration:none;}
+.note{font-size:12px;color:#5B6B7E;margin-top:14px;background:#EEF2F7;padding:10px 12px;border-radius:8px;}
+</style>
+</head>
+<body>
+
+<div class="box">
+
+<h1>📥 Import Data (from another phone)</h1>
+<p>Paste the data you copied using Export Data on the other device into the box below (click inside the box, then press Ctrl+V or long-press → Paste), then click Import.</p>
+
+<textarea id="pasteBox" placeholder="Click here, then paste..."></textarea>
+
+<button onclick="importData()">📥 Import This Data</button>
+
+<div class="status" id="status"></div>
+
+<a class="homeLink" id="homeLink" href="index.html" style="display:none;">➡️ Go to Login Page</a>
+
+<p class="note">ℹ️ This safely <b>combines</b> data instead of replacing it. New assets/employees/inspections from the other device are added in; anything already on this device (matched by Asset ID / Username) is left untouched, so you won't lose your own edits.</p>
+
+</div>
+
+<script>
+
+function mergeByKey(existingList, incomingList, keyName){
+
+    const existing = existingList || [];
+    const incoming = incomingList || [];
+
+    const existingKeys = new Set(existing.map(item => item[keyName]));
+
+    let addedCount = 0;
+
+    incoming.forEach(function(item){
+
+        if(!existingKeys.has(item[keyName])){
+            existing.push(item);
+            existingKeys.add(item[keyName]);
+            addedCount++;
+        }
+
+    });
+
+    return { merged: existing, addedCount: addedCount };
+
+}
+
+function mergeInspections(existingList, incomingList){
+
+    const existing = existingList || [];
+    const incoming = incomingList || [];
+
+    // Inspections don't have a single unique field, so we treat the
+    // combination of asset + date + inspector as the unique fingerprint.
+    const existingKeys = new Set(
+        existing.map(i => i.assetID + "|" + i.date + "|" + i.inspectedBy)
+    );
+
+    let addedCount = 0;
+
+    incoming.forEach(function(item){
+
+        const key = item.assetID + "|" + item.date + "|" + item.inspectedBy;
+
+        if(!existingKeys.has(key)){
+            existing.push(item);
+            existingKeys.add(key);
+            addedCount++;
+        }
+
+    });
+
+    return { merged: existing, addedCount: addedCount };
+
+}
+
+function importData(){
+
+    const raw = document.getElementById("pasteBox").value.trim();
+
+    const statusBox = document.getElementById("status");
+
+    if(!raw){
+        statusBox.className = "status error";
+        statusBox.textContent = "⚠️ The box is empty. Paste your copied data first.";
+        statusBox.style.display = "block";
+        return;
+    }
+
+    let incoming;
+
+    try{
+        incoming = JSON.parse(raw);
+    } catch(err){
+        statusBox.className = "status error";
+        statusBox.textContent = "⚠️ This doesn't look like valid data. Make sure you copied the WHOLE text from Export Data.";
+        statusBox.style.display = "block";
+        return;
+    }
+
+    const existingAssets = JSON.parse(localStorage.getItem("Assets") || "[]");
+    const existingEmployees = JSON.parse(localStorage.getItem("Employees")) || [];
+    const existingDepartments = JSON.parse(localStorage.getItem("Departments")) || [];
+    const existingInspections = JSON.parse(localStorage.getItem("Inspections")) || [];
+
+    const incomingAssets = incoming.Assets ? JSON.parse(incoming.Assets) : [];
+    const incomingEmployees = incoming.Employees ? JSON.parse(incoming.Employees) : [];
+    const incomingDepartments = incoming.Departments ? JSON.parse(incoming.Departments) : [];
+    const incomingInspections = incoming.Inspections ? JSON.parse(incoming.Inspections) : [];
+
+    const assetsResult = mergeByKey(existingAssets, incomingAssets, "assetID");
+    const employeesResult = mergeByKey(existingEmployees, incomingEmployees, "username");
+    const departmentsResult = mergeByKey(existingDepartments, incomingDepartments, "key");
+    const inspectionsResult = mergeInspections(existingInspections, incomingInspections);
+
+    localStorage.setItem("Assets", JSON.stringify(assetsResult.merged));
+    localStorage.setItem("Employees", JSON.stringify(employeesResult.merged));
+    localStorage.setItem("Departments", JSON.stringify(departmentsResult.merged));
+    localStorage.setItem("Inspections", JSON.stringify(inspectionsResult.merged));
+
+    // Login History is just a log, safe to append everything without deduping
+    if(incoming.LoginHistory){
+        const existingHistory = JSON.parse(localStorage.getItem("LoginHistory")) || [];
+        const incomingHistory = JSON.parse(incoming.LoginHistory) || [];
+        localStorage.setItem("LoginHistory", JSON.stringify(existingHistory.concat(incomingHistory)));
+    }
+
+    statusBox.className = "status success";
+    statusBox.textContent =
+        "✅ Success! Added " + assetsResult.addedCount + " new asset(s), " +
+        employeesResult.addedCount + " new employee(s), " +
+        inspectionsResult.addedCount + " new inspection(s).";
+    statusBox.style.display = "block";
+
+    document.getElementById("homeLink").style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>

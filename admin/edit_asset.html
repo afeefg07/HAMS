@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Asset</title>
+
+<link rel="stylesheet" href="../css/edit_asset.css">
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Edit Asset</h1>
+
+<button onclick="history.back()">⬅ Back</button>
+
+</header>
+
+<div class="container">
+
+<form id="editForm">
+
+<div class="photo">
+
+<img id="previewImage" src="../images/no-image.png">
+
+</div>
+
+<div class="grid">
+
+<div>
+<label>Asset ID</label>
+<input type="text" id="assetID" readonly>
+</div>
+
+<div>
+<label>Asset Name</label>
+<input type="text" id="assetName">
+</div>
+
+<div>
+<label>Manufacturer</label>
+<input type="text" id="manufacturer">
+</div>
+
+<div>
+<label>Model</label>
+<input type="text" id="model">
+</div>
+
+<div>
+<label>Serial Number</label>
+<input type="text" id="serial">
+</div>
+
+<div>
+<label>Category</label>
+<input type="text" id="category">
+</div>
+
+<div>
+<label>Sub Category</label>
+<input type="text" id="subcategory">
+</div>
+
+<div>
+<label>Division</label>
+<input type="text" id="division">
+</div>
+
+<div>
+<label>Block</label>
+<input type="text" id="block">
+</div>
+
+<div>
+<label>Section</label>
+<input type="text" id="section">
+</div>
+
+<div>
+<label>Location</label>
+<input type="text" id="location">
+</div>
+
+<div>
+<label>Sub Location</label>
+<input type="text" id="subLocation">
+</div>
+
+<div>
+<label>Department</label>
+<input type="text" id="department">
+</div>
+
+<div>
+<label>Work Department</label>
+<input type="text" id="workDepartment">
+</div>
+
+<div>
+<label>Asset Type</label>
+<input type="text" id="assetType">
+</div>
+
+<div>
+<label>Custodian</label>
+<input type="text" id="custodian">
+</div>
+
+<div>
+<label>Used By</label>
+<input type="text" id="usedBy">
+</div>
+
+<div>
+<label>Status</label>
+<input type="text" id="status">
+</div>
+
+</div>
+
+<div class="buttons">
+
+<button type="submit">
+
+💾 Save Changes
+
+</button>
+
+<button type="button" onclick="history.back()">
+
+Cancel
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+<script src="../js/edit_asset.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Home</title>
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="brand">
+
+<img class="logo-mark" src="images/logo.svg" alt="HAMS Logo">
+
+<h1>Hospital Asset Management System</h1>
+
+</div>
+
+<div class="user">
+
+<span id="welcomeUser"></span>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<!-- ===========================
+Global Stats (across ALL departments)
+=========================== -->
+
+<div class="stats-strip" id="globalStats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:44px;">
+
+<button class="stat-pill" onclick="location.href='departments/asset_verify.html?scope=all'" style="text-align:left;cursor:pointer;background:white;border:1px solid var(--color-line);border-radius:16px;padding:20px 22px;transition:transform .15s ease, box-shadow .15s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 24px rgba(15,42,74,.12)';" onmouseout="this.style.transform='none';this.style.boxShadow='none';">
+<div style="font-size:13px;color:var(--color-muted);margin-bottom:6px;">Total Assets</div>
+<div style="font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--color-primary);" id="statTotalAssets">0</div>
+</button>
+
+<button class="stat-pill" onclick="location.href='departments/asset_verify.html?scope=all&filter=verified'" style="text-align:left;cursor:pointer;background:white;border:1px solid var(--color-line);border-radius:16px;padding:20px 22px;transition:transform .15s ease, box-shadow .15s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 24px rgba(15,42,74,.12)';" onmouseout="this.style.transform='none';this.style.boxShadow='none';">
+<div style="font-size:13px;color:var(--color-muted);margin-bottom:6px;">Verified</div>
+<div style="font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--status-working);" id="statVerified">0</div>
+</button>
+
+<button class="stat-pill" onclick="location.href='departments/asset_inspection.html?scope=all&filter=inspected'" style="text-align:left;cursor:pointer;background:white;border:1px solid var(--color-line);border-radius:16px;padding:20px 22px;transition:transform .15s ease, box-shadow .15s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 24px rgba(15,42,74,.12)';" onmouseout="this.style.transform='none';this.style.boxShadow='none';">
+<div style="font-size:13px;color:var(--color-muted);margin-bottom:6px;">Asset Inspection</div>
+<div style="font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--status-repair);" id="statInspected">0</div>
+</button>
+
+</div>
+
+<!-- ===========================
+Section 1: Departments
+=========================== -->
+
+<div class="page-heading" style="text-align:left;margin-bottom:20px;">
+<h2 style="font-size:22px;">Departments</h2>
+<p>Choose your work area to continue</p>
+</div>
+
+<div class="cards" id="departmentCards" style="margin-bottom:48px;">
+
+</div>
+
+<!-- ===========================
+Sections 2-6: Tools
+=========================== -->
+
+<div class="page-heading" style="text-align:left;margin-bottom:20px;">
+<h2 style="font-size:22px;">Tools</h2>
+<p>Cross-department access</p>
+</div>
+
+<div class="cards" id="toolCards">
+
+<button class="dept-card admin-card" onclick="location.href='admin/admin_login.html'">
+<span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+<span class="code-chip">ADMIN</span>
+<div class="dept-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="1.6"/><path d="M8 10.5V7a4 4 0 018 0v3.5"/></svg>
+</div>
+<div class="dept-name">Admin Panel</div>
+<span class="dept-count">Administrator Access Only</span>
+</button>
+
+<button class="dept-card" onclick="location.href='departments/location_inspection.html'">
+<span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+<span class="code-chip">ALL DEPTS</span>
+<div class="dept-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="11" r="2.4"/></svg>
+</div>
+<div class="dept-name">Location Inspection</div>
+<span class="dept-count">Search any location</span>
+</button>
+
+<button class="dept-card" onclick="location.href='departments/assign_duty.html?scope=all'">
+<span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+<span class="code-chip">ALL DEPTS</span>
+<div class="dept-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5h12M8 12h12M8 19h12"/><path d="M3 5h.01M3 12h.01M3 19h.01"/></svg>
+</div>
+<div class="dept-name">Assign Duty</div>
+<span class="dept-count">Assign work to employees</span>
+</button>
+
+<button class="dept-card" onclick="location.href='departments/my_duties.html'">
+<span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+<span class="code-chip">EMPLOYEE</span>
+<div class="dept-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M5 21c.8-4 3-6 7-6s6.2 2 7 6"/><path d="M19 5l1 1 2-2"/></svg>
+</div>
+<div class="dept-name">My Duties</div>
+<span class="dept-count">Employee work inbox</span>
+</button>
+
+<button class="dept-card" onclick="location.href='departments/notifications.html'">
+<span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+<span class="code-chip">EMPLOYEE</span>
+<div class="dept-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+</div>
+<div class="dept-name">Notifications</div>
+<span class="dept-count">Employee inbox</span>
+</button>
+
+<button class="dept-card" onclick="location.href='departments/asset_inspection.html?scope=all'">
+<span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+<span class="code-chip">ALL DEPTS</span>
+<div class="dept-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+</div>
+<div class="dept-name">Asset Inspection</div>
+<span class="dept-count" id="deptCountInspection">— Assets</span>
+</button>
+
+<button class="dept-card" onclick="location.href='departments/asset_verify.html?scope=all'">
+<span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+<span class="code-chip">ALL DEPTS</span>
+<div class="dept-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M14 20h3M20 14v3M20 20v.01"/></svg>
+</div>
+<div class="dept-name">Verify Asset</div>
+<span class="dept-count" id="deptCountVerify">— Assets</span>
+</button>
+
+<button class="dept-card" onclick="location.href='departments/asset_utilization.html'">
+<span class="corner corner-tl"></span><span class="corner corner-tr"></span><span class="corner corner-bl"></span><span class="corner corner-br"></span>
+<span class="code-chip">ALL DEPTS</span>
+<div class="dept-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+</div>
+<div class="dept-name">Asset Utilization</div>
+<span class="dept-count">Distribution report</span>
+</button>
+
+</div>
+
+</div>
+
+<!-- Authentication -->
+
+<script src="js/auth.js"></script>
+<script src="js/hams_data_counts.js"></script>
+<script src="js/department_store.js"></script>
+
+<script>
+
+// Welcome Message
+
+const employeeName = localStorage.getItem("Employee") || "User";
+const role = localStorage.getItem("Role") || "Employee";
+
+document.getElementById("welcomeUser").innerHTML =
+"Welcome, <b>" + employeeName + "</b> (" + role + ")";
+
+// -----------------------------
+// Global Stats (across ALL departments, not just one)
+// -----------------------------
+function loadGlobalStats(){
+
+    const allAssets = JSON.parse(localStorage.getItem("Assets") || "[]");
+    const allInspections = JSON.parse(localStorage.getItem("Inspections")) || [];
+
+    const totalAssets = allAssets.length;
+    const verifiedCount = allAssets.filter(a => a.verified).length;
+
+    const currentAssetIDs = new Set(allAssets.map(a => a.assetID));
+    const inspectedAssetIDs = new Set(allInspections.filter(i => currentAssetIDs.has(i.assetID)).map(i => i.assetID));
+    const inspectedCount = inspectedAssetIDs.size;
+
+    document.getElementById("statTotalAssets").textContent = totalAssets;
+    document.getElementById("statVerified").textContent = verifiedCount;
+    document.getElementById("statInspected").textContent = inspectedCount;
+
+    document.getElementById("deptCountInspection").textContent = totalAssets + " Assets";
+    document.getElementById("deptCountVerify").textContent = totalAssets + " Assets";
+
+}
+
+// -----------------------------
+// Simple line icons per department key.
+// Falls back to a generic tag icon for custom departments.
+// -----------------------------
+function iconPathFor(key){
+
+    const icons = {
+
+        biomedical:
+            '<path d="M3 12h4l1.5-4L11 18l2-10 1.5 4H21"/>',
+
+        it:
+            '<rect x="4" y="4" width="16" height="6" rx="1.4"/><rect x="4" y="14" width="16" height="6" rx="1.4"/><circle cx="8" cy="7" r=".6" fill="currentColor" stroke="none"/><circle cx="8" cy="17" r=".6" fill="currentColor" stroke="none"/>',
+
+        fire:
+            '<path d="M12 2.5c1.2 3-1.8 4-1.8 7a2.8 2.8 0 005.6 0c0-1-.6-1.7-.6-1.7 1.8 1.1 2.8 3 2.8 5a6 6 0 11-12 0c0-4.2 3-6.4 4-8.3.4.6 1 1.4 2 2z"/>',
+
+        facilities:
+            '<path d="M4 21V9.5l8-5 8 5V21"/><path d="M9.5 21v-6h5v6"/><path d="M8.5 9h.01M15.5 9h.01M8.5 13h.01M15.5 13h.01"/>',
+
+        engineering:
+            '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.6M12 18.9v2.6M4.7 4.7l1.8 1.8M17.5 17.5l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.7 19.3l1.8-1.8M17.5 6.5l1.8-1.8"/>',
+
+        food:
+            '<path d="M6.5 2v7a2 2 0 002 2v11M6.5 2v20M9.5 2v7M12.5 2c-1.3 0-1.8 1.6-1.8 4.2s.5 6.6 1.8 6.6v9.2"/>'
+
+    };
+
+    return icons[key] || '<rect x="4" y="4" width="16" height="16" rx="2.4"/><path d="M4 9.5h16"/><path d="M8.5 4v5.5M15.5 4v5.5"/>';
+
+}
+
+// -----------------------------
+// Render Department Cards
+// (pulled from Department Management, with a live asset count per department)
+// -----------------------------
+function renderDepartmentCards(){
+
+    const departments = getDepartments();
+
+    const allAssets = JSON.parse(localStorage.getItem("Assets") || "[]");
+
+    const container = document.getElementById("departmentCards");
+
+    container.innerHTML = "";
+
+    departments.forEach(function(dept){
+
+        const count = allAssets.filter(a => a.workDepartment === dept.code).length;
+
+        const card = document.createElement("button");
+
+        card.type = "button";
+        card.className = "dept-card";
+
+        card.addEventListener("click", function(){ openDepartment(dept.key); });
+
+        card.innerHTML = `
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+
+            <span class="code-chip">${dept.code}</span>
+
+            <div class="dept-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    ${iconPathFor(dept.key)}
+                </svg>
+            </div>
+
+            <div class="dept-name">${dept.name}</div>
+
+            <span class="dept-count">${count} Asset${count === 1 ? "" : "s"} Tracked</span>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+// -----------------------------
+// Department Navigation
+// -----------------------------
+function openDepartment(department){
+
+    window.location.href =
+    "departments/employee_verification.html?dept=" + department;
+
+}
+
+function comingSoon(){
+    alert("This feature isn't built yet. It's on the roadmap!");
+}
+
+loadGlobalStats();
+renderDepartmentCards();
+
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+    try {
+        const count = JSON.parse(localStorage.getItem("Assets") || "[]").length;
+        document.querySelectorAll("#assetCount,[data-asset-count],.asset-count").forEach(el=>{
+            el.textContent = count;
+        });
+    } catch(e) {}
+});
+</script>
+
+
+<script>
+function refreshDashboardCounts(){
+ try {
+  const assets=JSON.parse(localStorage.getItem("Assets")||"[]");
+  const inspections=JSON.parse(localStorage.getItem("Inspections")||"[]");
+  const ids=new Set(assets.map(a=>a.assetID));
+  const inspected=new Set(inspections.filter(i=>ids.has(i.assetID)).map(i=>i.assetID));
+  const total=document.getElementById("statTotalAssets"), ver=document.getElementById("statVerified"), insp=document.getElementById("statInspected");
+  if(total) total.textContent=assets.length;
+  if(ver) ver.textContent=assets.filter(a=>a.verified).length;
+  if(insp) insp.textContent=inspected.size;
+  const dept=document.getElementById("deptCountInspection"); if(dept) dept.textContent=assets.length+" Assets";
+ }catch(e){}
+}
+window.addEventListener("storage",refreshDashboardCounts);
+window.addEventListener("pageshow",refreshDashboardCounts);
+</script>
+</body>
+
+</html>

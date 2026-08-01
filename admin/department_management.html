@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Department Management</title>
+
+<link rel="stylesheet" href="../css/admin_dashboard.css">
+<link rel="stylesheet" href="../css/components.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div class="brand">
+
+<img class="logo-mark" src="../images/logo.svg" alt="HAMS Logo">
+
+<h1>Department Management</h1>
+
+</div>
+
+<div class="right">
+
+<button onclick="location.href='admin_dashboard.html'">⬅ Back</button>
+
+</div>
+
+</header>
+
+<div class="container">
+
+<div class="content-card">
+
+<h3 id="formTitle">➕ Add Department</h3>
+
+<p class="hint">These departments appear on the employee "Select Department" screen and drive Asset ID prefixes (e.g. KNR-BIO-10000). Existing Asset IDs are not affected by changes here.</p>
+
+<div class="form-grid">
+
+<div>
+<label>Department Name *</label>
+<input type="text" id="deptName" placeholder="e.g. Radiology & Imaging">
+</div>
+
+<div>
+<label>Asset ID Prefix *</label>
+<input type="text" id="deptCode" placeholder="e.g. RAD" maxlength="6">
+</div>
+
+<div>
+<label>Icon URL (optional)</label>
+<input type="text" id="deptIcon" placeholder="https://...">
+</div>
+
+</div>
+
+<div style="display:flex;gap:12px;">
+
+<button class="btn btn-primary" id="saveBtn" onclick="saveDepartment()">💾 Add Department</button>
+
+<button class="btn btn-secondary" id="cancelBtn" style="display:none;" onclick="resetForm()">Cancel</button>
+
+</div>
+
+</div>
+
+<div class="content-card">
+
+<h3>📋 Current Departments</h3>
+
+<div class="table-wrap">
+
+<table class="styled-table">
+
+<thead>
+
+<tr>
+<th>Icon</th>
+<th>Name</th>
+<th>Prefix</th>
+<th>Internal Key</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="deptTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="../js/department_store.js"></script>
+
+<script>
+
+// If an Admin isn't logged in, send them back
+if(localStorage.getItem("AdminLoggedIn") !== "true"){
+    alert("Access Denied!");
+    window.location.href = "admin_login.html";
+}
+
+let editingKey = null;
+
+function renderDepartments(){
+
+    const departments = getDepartments();
+
+    const table = document.getElementById("deptTable");
+
+    table.innerHTML = "";
+
+    if(departments.length === 0){
+
+        table.innerHTML = `<tr class="empty-row"><td colspan="5">No Departments Found</td></tr>`;
+        return;
+
+    }
+
+    departments.forEach(function(dept){
+
+        table.innerHTML += `
+
+        <tr>
+
+            <td>${dept.icon ? `<img class="thumb" src="${dept.icon}" style="width:36px;height:36px;">` : "—"}</td>
+
+            <td>${dept.name}</td>
+
+            <td>${dept.code}</td>
+
+            <td>${dept.key}</td>
+
+            <td>
+
+                <div class="table-actions">
+
+                    <button class="btn-icon" title="Edit" onclick="editDepartment('${dept.key}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg>
+                    </button>
+
+                    <button class="btn-icon danger" title="Delete" onclick="deleteDepartment('${dept.key}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+                    </button>
+
+                </div>
+
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+}
+
+function saveDepartment(){
+
+    const name = document.getElementById("deptName").value.trim();
+    const code = document.getElementById("deptCode").value.trim().toUpperCase();
+    const icon = document.getElementById("deptIcon").value.trim();
+
+    if(!name){
+        alert("Department Name is required.");
+        return;
+    }
+
+    if(!code){
+        alert("Asset ID Prefix is required (e.g. BIO, IT, RAD).");
+        return;
+    }
+
+    let departments = getDepartments();
+
+    if(editingKey){
+
+        // Editing existing department
+        const duplicateCode = departments.some(d => d.key !== editingKey && d.code.toUpperCase() === code);
+
+        if(duplicateCode){
+            alert("Another department already uses this Asset ID Prefix. Please choose a different one.");
+            return;
+        }
+
+        departments = departments.map(function(d){
+
+            if(d.key === editingKey){
+                return { key: d.key, name: name, code: code, icon: icon };
+            }
+
+            return d;
+
+        });
+
+    } else {
+
+        // Adding new department
+        const duplicateCode = departments.some(d => d.code.toUpperCase() === code);
+
+        if(duplicateCode){
+            alert("This Asset ID Prefix is already used by another department. Please choose a different one.");
+            return;
+        }
+
+        const key = generateDepartmentKey(name);
+
+        departments.push({ key: key, name: name, code: code, icon: icon });
+
+    }
+
+    saveDepartments(departments);
+
+    resetForm();
+
+    renderDepartments();
+
+}
+
+function editDepartment(key){
+
+    const departments = getDepartments();
+
+    const dept = departments.find(d => d.key === key);
+
+    if(!dept){
+        return;
+    }
+
+    editingKey = key;
+
+    document.getElementById("deptName").value = dept.name;
+    document.getElementById("deptCode").value = dept.code;
+    document.getElementById("deptIcon").value = dept.icon || "";
+
+    document.getElementById("formTitle").textContent = "✏️ Edit Department";
+    document.getElementById("saveBtn").textContent = "💾 Update Department";
+    document.getElementById("cancelBtn").style.display = "inline-block";
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+}
+
+function deleteDepartment(key){
+
+    const departments = getDepartments();
+
+    const dept = departments.find(d => d.key === key);
+
+    if(!dept){
+        return;
+    }
+
+    const confirmMsg =
+        "Delete \"" + dept.name + "\"?\n\n" +
+        "This removes it from the department list and login screen. " +
+        "Employees or assets already assigned to this department will keep showing its old name, " +
+        "but new assets/employees can no longer select it.";
+
+    if(confirm(confirmMsg)){
+
+        const updated = departments.filter(d => d.key !== key);
+
+        saveDepartments(updated);
+
+        renderDepartments();
+
+    }
+
+}
+
+function resetForm(){
+
+    editingKey = null;
+
+    document.getElementById("deptName").value = "";
+    document.getElementById("deptCode").value = "";
+    document.getElementById("deptIcon").value = "";
+
+    document.getElementById("formTitle").textContent = "➕ Add Department";
+    document.getElementById("saveBtn").textContent = "💾 Add Department";
+    document.getElementById("cancelBtn").style.display = "none";
+
+}
+
+renderDepartments();
+
+</script>
+
+</body>
+
+</html>

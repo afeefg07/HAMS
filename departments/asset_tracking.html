@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Asset Tracking</title>
+
+<link rel="stylesheet" href="../css/dept_layout.css">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="sidebar-brand">
+<img class="logo-mark" src="../images/logo.svg" alt="HAMS Logo">
+<span class="title">HAMS</span>
+</div>
+
+<div class="dept-chip" id="deptChip"></div>
+
+<nav>
+
+<button class="nav-item" onclick="location.href='asset_registration.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+Asset Registration
+</button>
+
+<button class="nav-item active" onclick="location.href='asset_tracking.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+Asset Tracking
+</button>
+
+<button class="nav-item" onclick="location.href='asset_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+Asset Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_verify.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M14 20h3M20 14v3M20 20v.01"/></svg>
+Verify Asset
+</button>
+
+<button class="nav-item" onclick="location.href='location_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="11" r="2.4"/></svg>
+Location Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_utilization.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+Asset Utilization
+</button>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button class="nav-item" onclick="location.href='department_dashboard.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+Department Home
+</button>
+
+<button class="nav-item" onclick="logout()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+Logout
+</button>
+
+</div>
+
+</aside>
+
+<main class="main">
+
+<h1 class="page-title" id="pageTitle"></h1>
+
+<div class="content-card">
+
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search by Asset ID, Asset Name, Serial Number"
+style="flex:1;min-width:240px;padding:11px 14px;border:1px solid var(--color-line);border-radius:9px;font-family:inherit;font-size:14px;">
+
+<button class="btn btn-primary" onclick="searchAssets()">🔍 Search</button>
+
+<button class="btn btn-secondary" onclick="loadAssets()">📋 Show All</button>
+
+</div>
+
+<div class="table-wrap">
+
+<table class="styled-table">
+
+<thead>
+<tr>
+<th>Photo</th>
+<th>Asset ID</th>
+<th>Asset Name</th>
+<th>Manufacturer</th>
+<th>Model</th>
+<th>Serial No</th>
+<th>Location</th>
+<th>Sub Location</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="assetTable">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</main>
+
+<script src="../js/department_store.js"></script>
+<script src="../js/asset_tracking.js"></script>
+
+<script>
+
+function comingSoon(){
+    alert("This feature isn't built yet. It's on the roadmap!");
+}
+
+function logout(){
+
+    if(confirm("Are you sure you want to logout?")){
+
+        localStorage.removeItem("Employee");
+        localStorage.removeItem("Username");
+        localStorage.removeItem("EmployeeID");
+        localStorage.removeItem("Department");
+        localStorage.removeItem("Role");
+
+        window.location.href = "../index.html";
+
+    }
+
+}
+
+document.getElementById("deptChip").textContent =
+    currentDept.code + " · " + currentDept.name;
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Asset Details</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#eef3f8;
+}
+
+header{
+background:#003366;
+color:white;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.container{
+width:90%;
+max-width:1000px;
+margin:30px auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.photo{
+text-align:center;
+margin-bottom:30px;
+}
+
+.photo img{
+width:220px;
+height:220px;
+border:2px solid #ddd;
+border-radius:10px;
+object-fit:cover;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+table td{
+padding:12px;
+border-bottom:1px solid #ddd;
+}
+
+table td:first-child{
+font-weight:bold;
+width:250px;
+background:#f5f5f5;
+}
+
+.buttons{
+margin-top:30px;
+display:flex;
+justify-content:center;
+gap:20px;
+}
+
+button{
+padding:12px 25px;
+font-size:16px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:#003366;
+color:white;
+}
+
+button:hover{
+background:#0055aa;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Asset Details</h1>
+
+<button onclick="history.back()">⬅ Back</button>
+
+</header>
+
+<div class="container">
+
+<div class="photo">
+
+<img id="photo" src="../images/no-image.png">
+
+</div>
+
+<table>
+
+<tr><td>Asset ID</td><td id="assetID"></td></tr>
+<tr><td>Asset Name</td><td id="assetName"></td></tr>
+<tr><td>Manufacturer</td><td id="manufacturer"></td></tr>
+<tr><td>Model</td><td id="model"></td></tr>
+<tr><td>Serial Number</td><td id="serial"></td></tr>
+<tr><td>Category</td><td id="category"></td></tr>
+<tr><td>Sub Category</td><td id="subcategory"></td></tr>
+<tr><td>Division</td><td id="division"></td></tr>
+<tr><td>Block</td><td id="block"></td></tr>
+<tr><td>Section</td><td id="section"></td></tr>
+<tr><td>Location</td><td id="location"></td></tr>
+<tr><td>Sub Location</td><td id="subLocation"></td></tr>
+<tr><td>Department</td><td id="department"></td></tr>
+<tr><td>Work Department</td><td id="workDepartment"></td></tr>
+<tr><td>Asset Type</td><td id="assetType"></td></tr>
+<tr><td>Custodian</td><td id="custodian"></td></tr>
+<tr><td>Used By</td><td id="usedBy"></td></tr>
+<tr><td>Status</td><td id="status"></td></tr>
+
+</table>
+
+<div class="buttons">
+
+<button onclick="window.print()">🖨 Print</button>
+
+<button onclick="history.back()">⬅ Back</button>
+
+</div>
+
+</div>
+
+<script>
+
+let index=localStorage.getItem("SelectedAsset");
+
+let assets=JSON.parse(localStorage.getItem("Assets") || "[]");
+
+let asset=assets[index];
+
+if(asset){
+
+document.getElementById("photo").src=asset.photo||"../images/no-image.png";
+
+document.getElementById("assetID").innerHTML=asset.assetID||"";
+document.getElementById("assetName").innerHTML=asset.assetName||"";
+document.getElementById("manufacturer").innerHTML=asset.manufacturer||"";
+document.getElementById("model").innerHTML=asset.model||"";
+document.getElementById("serial").innerHTML=asset.serial||"";
+document.getElementById("category").innerHTML=asset.category||"";
+document.getElementById("subcategory").innerHTML=asset.subcategory||"";
+document.getElementById("division").innerHTML=asset.division||"";
+document.getElementById("block").innerHTML=asset.block||"";
+document.getElementById("section").innerHTML=asset.section||"";
+document.getElementById("location").innerHTML=asset.location||"";
+document.getElementById("subLocation").innerHTML=asset.subLocation||"";
+document.getElementById("department").innerHTML=asset.department||"";
+document.getElementById("workDepartment").innerHTML=asset.workDepartment||"";
+document.getElementById("assetType").innerHTML=asset.assetType||"";
+document.getElementById("custodian").innerHTML=asset.custodian||"";
+document.getElementById("usedBy").innerHTML=asset.usedBy||"";
+document.getElementById("status").innerHTML=asset.status||"";
+
+}
+
+</script>
+
+</body>
+
+</html>

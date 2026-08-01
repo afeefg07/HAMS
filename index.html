@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HAMS - Hospital Asset Management System</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="images/icon-192.png">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+    <meta name="theme-color" content="#0F2A4A">
+
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="login-box">
+
+            <span class="corner corner-tl"></span>
+            <span class="corner corner-tr"></span>
+            <span class="corner corner-bl"></span>
+            <span class="corner corner-br"></span>
+
+            <img class="logo" src="images/logo.svg" alt="HAMS Logo">
+
+            <div class="brand-wordmark">HAMS</div>
+
+            <h1>Hospital Asset Management System</h1>
+
+            <p>Secure Login</p>
+
+            <form>
+
+                <label>Username</label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="Enter Username"
+                >
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter Password"
+                >
+
+                <button type="button">
+                    Log In
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script src="js/login.js"></script>
+
+    <script>
+
+        // Register service worker so HAMS can be installed as an app
+        // and keep working without internet after the first visit.
+        if("serviceWorker" in navigator){
+
+            navigator.serviceWorker.register("service-worker.js")
+                .catch(function(err){
+                    console.log("Service worker registration failed:", err);
+                });
+
+        }
+
+    </script>
+
+</body>
+
+</html>

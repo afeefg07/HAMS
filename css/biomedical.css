@@ -1,0 +1,123 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, Arial, sans-serif;
+}
+
+body{
+    background:#eef4ff;
+}
+
+/* HEADER */
+
+header{
+    background:#0b3b8c;
+    color:white;
+    padding:18px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+}
+
+.employee{
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* NAVIGATION */
+
+nav{
+    background:#ffffff;
+    display:flex;
+    gap:15px;
+    padding:15px 30px;
+    box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+nav button{
+    padding:12px 20px;
+    border:none;
+    background:#0b3b8c;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+}
+
+nav button:hover{
+    background:#1454c4;
+}
+
+/* WELCOME */
+
+.welcome{
+    text-align:center;
+    padding:40px 20px;
+}
+
+.welcome h1{
+    color:#0b3b8c;
+    margin-bottom:10px;
+    font-size:34px;
+}
+
+.welcome p{
+    color:#555;
+    font-size:18px;
+}
+
+/* CARDS */
+
+.cards{
+    width:92%;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
+    padding-bottom:40px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:35px 25px;
+    text-align:center;
+    cursor:pointer;
+    transition:.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,.12);
+    font-size:45px;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card h2{
+    margin-top:20px;
+    color:#0b3b8c;
+    font-size:24px;
+}
+
+.card p{
+    margin-top:12px;
+    color:#666;
+    font-size:15px;
+    line-height:1.5;
+}
+
+/* FOOTER */
+
+footer{
+    background:#0b3b8c;
+    color:white;
+    text-align:center;
+    padding:18px;
+    margin-top:30px;
+}

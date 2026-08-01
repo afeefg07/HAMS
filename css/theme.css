@@ -1,0 +1,79 @@
+/* ==========================================
+   Hospital Asset Management System (HAMS)
+   Shared Design System
+   Imported by every page's own stylesheet.
+========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+
+    --color-bg: #EEF2F7;
+    --color-surface: #FFFFFF;
+    --color-ink: #16212E;
+    --color-muted: #5B6B7E;
+
+    --color-primary: #0F2A4A;
+    --color-primary-2: #17456B;
+    --color-accent: #E29A3C;
+
+    --color-line: #DCE3EC;
+
+    --status-working: #1E8E5A;
+    --status-repair: #C9862B;
+    --status-condemned: #C44536;
+
+    --radius: 16px;
+
+    --font-display: 'Space Grotesk', Arial, sans-serif;
+    --font-body: 'Inter', Arial, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--color-bg);
+    font-family:var(--font-body);
+    color:var(--color-ink);
+}
+
+/* ==========================================
+   Reusable pieces
+========================================== */
+
+.brand-mark{
+    font-family:var(--font-mono);
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:.12em;
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.28);
+    padding:5px 9px;
+    border-radius:7px;
+    color:white;
+}
+
+.corner{
+    position:absolute;
+    width:16px;
+    height:16px;
+    border:2px solid var(--color-line);
+    transition:border-color .18s ease, width .18s ease, height .18s ease;
+}
+
+.corner-tl{ top:10px; left:10px; border-right:none; border-bottom:none; border-radius:4px 0 0 0; }
+.corner-tr{ top:10px; right:10px; border-left:none; border-bottom:none; border-radius:0 4px 0 0; }
+.corner-bl{ bottom:10px; left:10px; border-right:none; border-top:none; border-radius:0 0 0 4px; }
+.corner-br{ bottom:10px; right:10px; border-left:none; border-top:none; border-radius:0 0 4px 0; }
+
+@media (prefers-reduced-motion: reduce){
+    *{
+        transition:none !important;
+    }
+}

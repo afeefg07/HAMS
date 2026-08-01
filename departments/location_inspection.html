@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Location Inspection</title>
+
+<link rel="stylesheet" href="../css/dept_layout.css">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="sidebar-brand">
+<img class="logo-mark" src="../images/logo.svg" alt="HAMS Logo">
+<span class="title">HAMS</span>
+</div>
+
+<div class="dept-chip">ALL DEPARTMENTS</div>
+
+<nav>
+
+<button class="nav-item" onclick="location.href='../dashboard.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+Home
+</button>
+
+<button class="nav-item" onclick="location.href='asset_inspection.html?scope=all'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+Asset Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_verify.html?scope=all'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M14 20h3M20 14v3M20 20v.01"/></svg>
+Verify Asset
+</button>
+
+<button class="nav-item active" onclick="location.href='location_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="11" r="2.4"/></svg>
+Location Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_utilization.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+Asset Utilization
+</button>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button class="nav-item" onclick="logout()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+Logout
+</button>
+
+</div>
+
+</aside>
+
+<main class="main">
+
+<h1 class="page-title">Location Inspection</h1>
+
+<div class="content-card">
+
+<p class="hint">Select a Block, Section, Location or Sub Location to see every matching asset across all departments in one place.</p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:20px;">
+
+<div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;">
+<div style="font-size:12px;color:var(--color-muted);margin-bottom:4px;">Matching Assets</div>
+<div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--color-primary);" id="statMatchingAssets">0</div>
+</div>
+
+<div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;">
+<div style="font-size:12px;color:var(--color-muted);margin-bottom:4px;">Unique Locations</div>
+<div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--color-primary);" id="statUniqueLocations">0</div>
+</div>
+
+</div>
+
+<div class="form-grid" style="margin-bottom:0;">
+
+<div>
+<label>Block</label>
+<select id="block">
+<option value="">All Blocks</option>
+<option value="Main Block">Main Block</option>
+<option value="Emergency Block">Emergency Block</option>
+<option value="Service Block">Service Block</option>
+<option value="Yard">Yard</option>
+</select>
+</div>
+
+<div>
+<label>Section</label>
+<select id="section">
+<option value="">All Sections</option>
+</select>
+</div>
+
+<div>
+<label>Location</label>
+<select id="location">
+<option value="">All Locations</option>
+</select>
+</div>
+
+<div>
+<label>Sub Location</label>
+<select id="subLocation">
+<option value="">All Sub Locations</option>
+</select>
+</div>
+
+</div>
+
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;">
+
+<button class="btn btn-primary" onclick="searchLocation()">🔍 Search</button>
+
+<button class="btn btn-secondary" onclick="clearLocationFilters()">📋 Show All</button>
+
+</div>
+
+</div>
+
+<div class="content-card">
+
+<div class="table-wrap">
+
+<table class="styled-table">
+
+<thead>
+<tr>
+<th>Asset ID</th>
+<th>Asset Name</th>
+<th>Department</th>
+<th>Block</th>
+<th>Section</th>
+<th>Location</th>
+<th>Sub Location</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody id="locationTable">
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</main>
+
+<script src="../js/hospital_locations.js"></script>
+<script src="../js/department_store.js"></script>
+<script src="../js/location_inspection.js"></script>
+
+<script>
+
+function comingSoon(){
+    alert("This feature isn't built yet. It's on the roadmap!");
+}
+
+function logout(){
+
+    if(confirm("Are you sure you want to logout?")){
+
+        localStorage.removeItem("Employee");
+        localStorage.removeItem("Username");
+        localStorage.removeItem("EmployeeID");
+        localStorage.removeItem("Department");
+        localStorage.removeItem("Role");
+
+        window.location.href = "../index.html";
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

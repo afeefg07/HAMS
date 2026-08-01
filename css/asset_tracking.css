@@ -1,0 +1,196 @@
+/* ==========================================
+   GENERAL
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+    background:#eef4ff;
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+header{
+    background:#0b3b8c;
+    color:white;
+    padding:20px 40px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+header h1{
+    font-size:28px;
+}
+
+#employee{
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* ==========================================
+   CONTAINER
+========================================== */
+
+.container{
+    width:96%;
+    margin:30px auto;
+}
+
+.container h2{
+    color:#0b3b8c;
+    margin-bottom:25px;
+}
+
+/* ==========================================
+   SEARCH
+========================================== */
+
+.search-box{
+
+display:flex;
+
+gap:15px;
+
+margin-bottom:25px;
+
+}
+
+.search-box input{
+
+flex:1;
+
+padding:14px;
+
+font-size:16px;
+
+border:1px solid #ccc;
+
+border-radius:8px;
+
+}
+
+.search-box input:focus{
+
+outline:none;
+
+border:2px solid #0b3b8c;
+
+}
+
+.search-box button{
+
+padding:14px 25px;
+
+background:#0b3b8c;
+
+color:white;
+
+border:none;
+
+border-radius:8px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.search-box button:hover{
+
+background:#1454c4;
+
+}
+
+/* ==========================================
+   TABLE
+========================================== */
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+background:white;
+
+box-shadow:0 5px 15px rgba(0,0,0,.10);
+
+border-radius:10px;
+
+overflow:hidden;
+
+}
+
+thead{
+
+background:#0b3b8c;
+
+color:white;
+
+}
+
+th{
+
+padding:15px;
+
+text-align:left;
+
+}
+
+td{
+
+padding:15px;
+
+border-bottom:1px solid #ddd;
+
+}
+
+tbody tr:hover{
+
+background:#f3f7ff;
+
+}
+
+td img{
+
+width:70px;
+
+height:70px;
+
+border-radius:8px;
+
+object-fit:cover;
+
+border:1px solid #ccc;
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:900px){
+
+.search-box{
+
+flex-direction:column;
+
+}
+
+table{
+
+display:block;
+
+overflow-x:auto;
+
+}
+
+}

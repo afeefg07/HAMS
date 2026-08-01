@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Asset Utilization</title>
+
+<link rel="stylesheet" href="../css/dept_layout.css">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="sidebar-brand">
+<img class="logo-mark" src="../images/logo.svg" alt="HAMS Logo">
+<span class="title">HAMS</span>
+</div>
+
+<div class="dept-chip">ALL DEPARTMENTS</div>
+
+<nav>
+
+<button class="nav-item" onclick="location.href='../dashboard.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+Home
+</button>
+
+<button class="nav-item" onclick="location.href='asset_inspection.html?scope=all'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+Asset Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_verify.html?scope=all'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M14 20h3M20 14v3M20 20v.01"/></svg>
+Verify Asset
+</button>
+
+<button class="nav-item" onclick="location.href='location_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="11" r="2.4"/></svg>
+Location Inspection
+</button>
+
+<button class="nav-item active" onclick="location.href='asset_utilization.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+Asset Utilization
+</button>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button class="nav-item" onclick="logout()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+Logout
+</button>
+
+</div>
+
+</aside>
+
+<main class="main">
+
+<h1 class="page-title">Asset Utilization</h1>
+
+<div class="content-card">
+
+<p class="hint">A breakdown of every registered asset across departments, categories, and status - useful for spotting imbalances or gaps at a glance.</p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;">
+
+<div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;">
+<div style="font-size:12px;color:var(--color-muted);margin-bottom:4px;">Total Assets</div>
+<div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--color-primary);" id="statTotal">0</div>
+</div>
+
+<div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;">
+<div style="font-size:12px;color:var(--color-muted);margin-bottom:4px;">Assigned (Used By)</div>
+<div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--status-working);" id="statAssigned">0</div>
+</div>
+
+<div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;">
+<div style="font-size:12px;color:var(--color-muted);margin-bottom:4px;">Unassigned</div>
+<div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--status-repair);" id="statUnassigned">0</div>
+</div>
+
+<div style="background:var(--color-bg);border-radius:10px;padding:14px 16px;">
+<div style="font-size:12px;color:var(--color-muted);margin-bottom:4px;">Active Departments</div>
+<div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--color-primary);" id="statActiveDepts">0</div>
+</div>
+
+</div>
+
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;">
+
+<div class="content-card">
+<h3>By Department</h3>
+<div id="byDepartment"></div>
+</div>
+
+<div class="content-card">
+<h3>By Category</h3>
+<div id="byCategory"></div>
+</div>
+
+<div class="content-card">
+<h3>By Status</h3>
+<div id="byStatus"></div>
+</div>
+
+</div>
+
+</main>
+
+<script src="../js/department_store.js"></script>
+<script src="../js/asset_utilization.js"></script>
+
+<script>
+
+function logout(){
+
+    if(confirm("Are you sure you want to logout?")){
+
+        localStorage.removeItem("Employee");
+        localStorage.removeItem("Username");
+        localStorage.removeItem("EmployeeID");
+        localStorage.removeItem("Department");
+        localStorage.removeItem("Role");
+
+        window.location.href = "../index.html";
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

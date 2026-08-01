@@ -1,0 +1,399 @@
+/* ==========================================
+   HAMS - Shared Components
+   (buttons, tables, content cards, form fields)
+   Used by: asset_registration, asset_tracking, edit_asset,
+            asset_management, employee_management, department_management
+========================================== */
+
+@import url('theme.css');
+
+/* ==========================================
+   Content Card
+========================================== */
+
+.content-card{
+    background:var(--color-surface);
+    border:1px solid var(--color-line);
+    border-radius:var(--radius);
+    padding:26px 28px;
+    margin-bottom:24px;
+}
+
+.content-card h3{
+    font-family:var(--font-display);
+    font-size:17px;
+    font-weight:600;
+    color:var(--color-primary);
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--color-line);
+}
+
+.content-card .hint{
+    font-size:13px;
+    color:var(--color-muted);
+    margin-bottom:18px;
+}
+
+/* ==========================================
+   Form Grid
+========================================== */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:18px;
+    margin-bottom:18px;
+}
+
+.form-grid label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--color-ink);
+    margin-bottom:6px;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea{
+    width:100%;
+    padding:10px 12px;
+    font-family:var(--font-body);
+    font-size:14px;
+    border:1px solid var(--color-line);
+    border-radius:8px;
+    background:var(--color-surface);
+    transition:border-color .15s ease, box-shadow .15s ease;
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus{
+    outline:none;
+    border-color:var(--color-accent);
+    box-shadow:0 0 0 3px rgba(226,154,60,.15);
+}
+
+.form-grid input[readonly]{
+    background:var(--color-bg);
+    color:var(--color-muted);
+}
+
+/* ==========================================
+   Buttons
+========================================== */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 22px;
+    font-family:var(--font-body);
+    font-size:14px;
+    font-weight:600;
+    border-radius:9px;
+    border:none;
+    cursor:pointer;
+    transition:filter .15s ease, transform .1s ease;
+}
+
+.btn:active{
+    transform:scale(.98);
+}
+
+.btn:focus-visible{
+    outline:2px solid var(--color-accent);
+    outline-offset:2px;
+}
+
+.btn-primary{
+    background:linear-gradient(135deg, var(--color-primary), var(--color-primary-2));
+    color:white;
+}
+
+.btn-primary:hover{
+    filter:brightness(1.1);
+}
+
+.btn-accent{
+    background:var(--color-accent);
+    color:white;
+}
+
+.btn-accent:hover{
+    filter:brightness(1.08);
+}
+
+.btn-secondary{
+    background:var(--color-bg);
+    color:var(--color-ink);
+    border:1px solid var(--color-line);
+}
+
+.btn-secondary:hover{
+    background:#E4E9F0;
+}
+
+.btn-danger{
+    background:#FDF3F1;
+    color:var(--status-condemned);
+    border:1px solid #F2C9C0;
+}
+
+.btn-danger:hover{
+    background:#FBE7E4;
+}
+
+.btn-icon{
+    padding:9px;
+    border-radius:8px;
+    background:var(--color-surface);
+    border:1px solid var(--color-line);
+    color:var(--color-muted);
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.btn-icon svg{
+    width:16px;
+    height:16px;
+}
+
+.btn-icon:hover{
+    background:var(--color-primary);
+    color:white;
+    border-color:var(--color-primary);
+}
+
+.btn-icon.danger:hover{
+    background:var(--status-condemned);
+    border-color:var(--status-condemned);
+}
+
+/* ==========================================
+   Styled Table
+========================================== */
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table.styled-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:14px;
+}
+
+table.styled-table thead th{
+    background:var(--color-primary);
+    color:white;
+    text-align:left;
+    padding:12px 14px;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:.02em;
+    white-space:nowrap;
+}
+
+table.styled-table tbody td{
+    padding:12px 14px;
+    border-bottom:1px solid var(--color-line);
+    vertical-align:middle;
+}
+
+table.styled-table tbody tr:hover{
+    background:var(--color-bg);
+}
+
+table.styled-table img.thumb{
+    width:52px;
+    height:52px;
+    object-fit:cover;
+    border-radius:8px;
+    border:1px solid var(--color-line);
+}
+
+.table-actions{
+    display:flex;
+    gap:8px;
+}
+
+.empty-row td{
+    text-align:center;
+    padding:40px !important;
+    color:var(--color-muted);
+    font-size:14px;
+}
+
+/* ==========================================
+   Status Badge
+========================================== */
+
+.badge{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:600;
+    padding:4px 10px;
+    border-radius:20px;
+    letter-spacing:.02em;
+}
+
+.badge-working{ background:#E4F5EC; color:var(--status-working); }
+.badge-repair{ background:#FBF0DF; color:var(--status-repair); }
+.badge-condemned{ background:#FBE7E4; color:var(--status-condemned); }
+
+/* ==========================================
+   Toast (used by asset_registration.js)
+========================================== */
+
+.hams-toast{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    padding:14px 22px;
+    border-radius:10px;
+    color:white;
+    font-family:var(--font-body);
+    font-size:14px;
+    font-weight:600;
+    box-shadow:0 8px 24px rgba(0,0,0,.2);
+    z-index:2000;
+    transition:opacity .4s ease;
+}
+
+.hams-toast.success{ background:var(--status-working); }
+.hams-toast.error{ background:var(--status-condemned); }
+
+/* ==========================================
+   Modal
+========================================== */
+
+.modal-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,42,74,.55);
+    z-index:3000;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-overlay.open{
+    display:flex;
+}
+
+.modal-box{
+    background:var(--color-surface);
+    border-radius:var(--radius);
+    padding:28px;
+    width:420px;
+    max-width:100%;
+    box-shadow:0 25px 60px rgba(0,0,0,.3);
+}
+
+.modal-box h3{
+    font-family:var(--font-display);
+    font-size:18px;
+    font-weight:700;
+    color:var(--color-primary);
+    margin-bottom:4px;
+}
+
+.modal-box .modal-sub{
+    font-size:13px;
+    color:var(--color-muted);
+    margin-bottom:20px;
+}
+
+.modal-box label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--color-ink);
+    margin-bottom:6px;
+    margin-top:14px;
+}
+
+.modal-box label:first-of-type{
+    margin-top:0;
+}
+
+.modal-box select,
+.modal-box textarea{
+    width:100%;
+    padding:10px 12px;
+    font-family:var(--font-body);
+    font-size:14px;
+    border:1px solid var(--color-line);
+    border-radius:8px;
+}
+
+.modal-box textarea{
+    resize:vertical;
+    min-height:70px;
+}
+
+.modal-box select:focus,
+.modal-box textarea:focus{
+    outline:none;
+    border-color:var(--color-accent);
+    box-shadow:0 0 0 3px rgba(226,154,60,.15);
+}
+
+.modal-actions{
+    display:flex;
+    gap:10px;
+    margin-top:22px;
+}
+
+.modal-actions .btn{
+    flex:1;
+    justify-content:center;
+}
+
+.photo-preview{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.photo-preview img{
+    width:150px;
+    height:150px;
+    object-fit:cover;
+    border-radius:12px;
+    border:1px solid var(--color-line);
+}
+
+/* ==========================================
+   Verification Status Dot
+========================================== */
+
+.status-dot{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    margin-right:6px;
+    vertical-align:middle;
+}
+
+.status-dot.verified{
+    background:var(--status-working);
+    box-shadow:0 0 0 3px rgba(30,142,90,.18);
+}
+
+.status-dot.unverified{
+    background:var(--status-condemned);
+    box-shadow:0 0 0 3px rgba(196,69,54,.18);
+}
+
+.qr-canvas{
+    border-radius:6px;
+    border:1px solid var(--color-line);
+    display:block;
+}

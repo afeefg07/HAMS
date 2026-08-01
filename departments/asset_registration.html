@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Asset Registration</title>
+
+<link rel="stylesheet" href="../css/dept_layout.css">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="sidebar-brand">
+<img class="logo-mark" src="../images/logo.svg" alt="HAMS Logo">
+<span class="title">HAMS</span>
+</div>
+
+<div class="dept-chip" id="deptChip"></div>
+
+<nav>
+
+<button class="nav-item active" onclick="location.href='asset_registration.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+Asset Registration
+</button>
+
+<button class="nav-item" onclick="location.href='asset_tracking.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+Asset Tracking
+</button>
+
+<button class="nav-item" onclick="location.href='asset_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+Asset Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_verify.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M14 20h3M20 14v3M20 20v.01"/></svg>
+Verify Asset
+</button>
+
+<button class="nav-item" onclick="location.href='location_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="11" r="2.4"/></svg>
+Location Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_utilization.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+Asset Utilization
+</button>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button class="nav-item" onclick="location.href='department_dashboard.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+Department Home
+</button>
+
+<button class="nav-item" onclick="logout()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+Logout
+</button>
+
+</div>
+
+</aside>
+
+<main class="main">
+
+<h1 class="page-title" id="departmentTitle"></h1>
+
+<!-- ===========================
+Bulk Import Assets
+=========================== -->
+
+<div class="content-card">
+
+<h3>📥 Bulk Import Assets (CSV)</h3>
+
+<p class="hint">Upload a CSV file to register many assets at once. Asset ID, Division and Department are filled in automatically — no need to include them in the file.</p>
+
+<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+
+<button type="button" id="downloadTemplateBtn" class="btn btn-secondary">⬇️ Download CSV Template</button>
+
+<label class="btn btn-secondary" style="cursor:pointer;">
+Choose CSV File
+<input type="file" id="bulkCsvFile" accept=".csv" hidden>
+</label>
+
+<button type="button" id="bulkImportBtn" class="btn btn-primary">📤 Import Assets</button>
+
+</div>
+
+<p id="bulkFileName" style="margin-top:12px;color:var(--color-muted);font-size:13.5px;"></p>
+
+<div id="bulkResults" style="margin-top:15px;"></div>
+
+</div>
+
+<form id="assetForm">
+
+<!-- ===========================
+Basic Asset Information
+=========================== -->
+
+<div class="content-card">
+
+<h3>Basic Asset Information</h3>
+
+<div class="form-grid">
+
+<div>
+<label>Asset ID</label>
+<input type="text" id="assetId" readonly>
+</div>
+
+<div>
+<label>Asset Name *</label>
+<input type="text" id="assetName" required>
+</div>
+
+<div>
+<label>Manufacturer</label>
+<input type="text" id="manufacturer">
+</div>
+
+<div>
+<label>Model</label>
+<input type="text" id="model">
+</div>
+
+<div>
+<label>Serial Number</label>
+<input type="text" id="serial">
+</div>
+
+<div>
+<label>Category</label>
+<input type="text" id="category">
+</div>
+
+<div>
+<label>Sub Category</label>
+<input type="text" id="subcategory">
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Asset Photo
+=========================== -->
+
+<div class="content-card">
+
+<h3>📷 Asset Photo</h3>
+
+<div class="photo-preview">
+
+<img id="previewImage" src="../images/no-image.png" alt="Asset Photo">
+
+</div>
+
+<div style="text-align:center;">
+
+<label class="btn btn-secondary" style="cursor:pointer;">
+Choose Asset Photo
+<input type="file" id="assetPhoto" accept=".jpg,.jpeg,.png" hidden>
+</label>
+
+<p style="margin-top:10px;color:var(--color-muted);font-size:12.5px;">Accepted formats: JPG, JPEG, PNG (Maximum Size 5 MB)</p>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Location Details
+=========================== -->
+
+<div class="content-card">
+
+<h3>Location Details</h3>
+
+<div class="form-grid">
+
+<div>
+<label>Division</label>
+<input type="text" id="division" value="BMH Kannur" readonly>
+</div>
+
+<div>
+<label>Block</label>
+<select id="block">
+<option value="">Select Block</option>
+<option value="Main Block">Main Block</option>
+<option value="Emergency Block">Emergency Block</option>
+<option value="Service Block">Service Block</option>
+<option value="Yard">Yard</option>
+</select>
+</div>
+
+<div>
+<label>Section</label>
+<select id="section">
+<option value="">Select Section</option>
+</select>
+</div>
+
+<div>
+<label>Location</label>
+<select id="location">
+<option value="">Select Location</option>
+</select>
+</div>
+
+<div>
+<label>Sub Location</label>
+<select id="subLocation">
+<option value="">Select Sub Location</option>
+</select>
+</div>
+
+<div>
+<label>Department</label>
+<input type="text" id="department" readonly>
+</div>
+
+<div>
+<label>Work Department</label>
+<input type="text" id="workDepartment">
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Ownership Details
+=========================== -->
+
+<div class="content-card">
+
+<h3>Ownership Details</h3>
+
+<div class="form-grid">
+
+<div>
+<label>Asset Type</label>
+<select id="assetType">
+<option>Owned</option>
+<option>Leased</option>
+<option>Rented</option>
+</select>
+</div>
+
+<div>
+<label>Custodian</label>
+<input type="text" id="custodian">
+</div>
+
+<div>
+<label>Used By</label>
+<input type="text" id="usedBy">
+</div>
+
+<div>
+<label>Status</label>
+<select id="status">
+<option>Working</option>
+<option>Under Repair</option>
+<option>Condemned</option>
+</select>
+</div>
+
+</div>
+
+</div>
+
+<!-- ===========================
+Buttons
+=========================== -->
+
+<div style="display:flex;gap:14px;margin-bottom:40px;">
+
+<button type="submit" class="btn btn-primary">💾 Save Asset</button>
+
+<button type="reset" class="btn btn-secondary">🔄 Clear</button>
+
+</div>
+
+</form>
+
+</main>
+
+<script src="../js/hospital_locations.js"></script>
+<script src="../js/department_store.js"></script>
+<script src="../js/asset_registration.js"></script>
+
+<script>
+
+const currentDeptTitle = getDepartment(localStorage.getItem("CurrentDepartment"));
+
+document.getElementById("departmentTitle").innerHTML =
+currentDeptTitle.name + " - Asset Registration";
+
+document.getElementById("deptChip").textContent =
+currentDeptTitle.code + " · " + currentDeptTitle.name;
+
+function comingSoon(){
+    alert("This feature isn't built yet. It's on the roadmap!");
+}
+
+function logout(){
+
+    if(confirm("Are you sure you want to logout?")){
+
+        localStorage.removeItem("Employee");
+        localStorage.removeItem("Username");
+        localStorage.removeItem("EmployeeID");
+        localStorage.removeItem("Department");
+        localStorage.removeItem("Role");
+
+        window.location.href = "../index.html";
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

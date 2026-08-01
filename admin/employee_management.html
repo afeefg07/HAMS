@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Employee Management</title>
+
+<link rel="stylesheet" href="../css/employee_management.css">
+
+</head>
+
+<body>
+
+<header>
+
+<div style="display:flex;align-items:center;gap:14px;">
+<img src="../images/logo.svg" alt="HAMS Logo" style="width:32px;height:32px;">
+<h1>Employee Management</h1>
+</div>
+
+<button onclick="location.href='admin_dashboard.html'">
+⬅ Back
+</button>
+
+</header>
+
+<div class="container">
+
+<!-- Statistics -->
+
+<div class="stats">
+
+<div class="stat-card">
+<h2 id="totalEmployees">0</h2>
+<p>Total Employees</p>
+</div>
+
+<div class="stat-card">
+<h2 id="activeEmployees">0</h2>
+<p>Active</p>
+</div>
+
+<div class="stat-card">
+<h2 id="inactiveEmployees">0</h2>
+<p>Inactive</p>
+</div>
+
+<div class="stat-card">
+<h2 id="totalAdmins">0</h2>
+<p>Administrators</p>
+</div>
+
+</div>
+
+<!-- Employee Form -->
+
+<div class="form-box">
+
+<h2>Add Employee</h2>
+
+<form id="employeeForm">
+
+<div class="grid">
+
+<div>
+<label>Employee ID</label>
+<input type="text" id="employeeID" readonly>
+</div>
+
+<div>
+<label>Employee Name</label>
+<input type="text" id="employeeName" required>
+</div>
+
+<div>
+<label>Username</label>
+<input type="text" id="username" required>
+</div>
+
+<div>
+<label>Password</label>
+<input type="password" id="password" required>
+</div>
+
+<div>
+<label>Email</label>
+<input type="email" id="email">
+</div>
+
+<div>
+<label>Mobile Number</label>
+<input type="text" id="mobile">
+</div>
+
+<div>
+<label>Department</label>
+
+<select id="department">
+
+<option>Biomedical Engineering</option>
+<option>Information Technology</option>
+<option>Fire & Safety</option>
+<option>Facilities Management</option>
+<option>Engineering Support</option>
+<option>Food & Beverage</option>
+<option>Human Resources</option>
+<option>Administration</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>Designation</label>
+
+<input type="text" id="designation">
+
+</div>
+
+<div>
+
+<label>Role</label>
+
+<select id="role">
+
+<option>Employee</option>
+<option>Admin</option>
+
+</select>
+
+</div>
+
+<div>
+
+<label>Status</label>
+
+<select id="status">
+
+<option>Active</option>
+<option>Inactive</option>
+
+</select>
+
+</div>
+
+</div>
+
+<br>
+
+<button type="submit">💾 Save Employee</button>
+
+</form>
+
+</div>
+
+<br>
+
+<input
+type="text"
+id="search"
+placeholder="🔍 Search Employee">
+
+<br><br>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Username</th>
+<th>Department</th>
+<th>Role</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="employeeTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+// Protect this page - only accessible when logged in as Admin
+if(localStorage.getItem("AdminLoggedIn") !== "true"){
+    alert("Access Denied!");
+    window.location.href = "admin_login.html";
+}
+
+</script>
+
+<script src="../js/employee_management.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "Hospital Asset Management System",
+  "short_name": "HAMS",
+  "description": "Hospital Asset Management System - track, verify, and inspect hospital equipment.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EEF2F7",
+  "theme_color": "#0F2A4A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

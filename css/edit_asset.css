@@ -1,0 +1,128 @@
+/* =======================================
+   Hospital Asset Management System
+   Edit Asset CSS
+======================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#eef3f8;
+}
+
+header{
+    background:#003366;
+    color:white;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+header h1{
+    font-size:28px;
+}
+
+header button{
+    background:white;
+    color:#003366;
+    border:none;
+    padding:10px 20px;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+header button:hover{
+    background:#e0e0e0;
+}
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:30px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.photo{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.photo img{
+    width:220px;
+    height:220px;
+    object-fit:cover;
+    border:2px solid #ccc;
+    border-radius:10px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.grid div{
+    display:flex;
+    flex-direction:column;
+}
+
+label{
+    margin-bottom:8px;
+    font-weight:bold;
+    color:#003366;
+}
+
+input{
+    padding:10px;
+    font-size:15px;
+    border:1px solid #bbb;
+    border-radius:5px;
+}
+
+input:focus{
+    outline:none;
+    border:1px solid #003366;
+}
+
+.buttons{
+    margin-top:35px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+}
+
+.buttons button{
+    padding:12px 30px;
+    font-size:16px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.buttons button[type="submit"]{
+    background:#28a745;
+    color:white;
+}
+
+.buttons button[type="submit"]:hover{
+    background:#218838;
+}
+
+.buttons button[type="button"]{
+    background:#dc3545;
+    color:white;
+}
+
+.buttons button[type="button"]:hover{
+    background:#c82333;
+}

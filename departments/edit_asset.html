@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HAMS - Edit Asset</title>
+
+<link rel="stylesheet" href="../css/dept_layout.css">
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+<div class="sidebar-brand">
+<img class="logo-mark" src="../images/logo.svg" alt="HAMS Logo">
+<span class="title">HAMS</span>
+</div>
+
+<div class="dept-chip" id="deptChip"></div>
+
+<nav>
+
+<button class="nav-item" onclick="location.href='asset_registration.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+Asset Registration
+</button>
+
+<button class="nav-item active" onclick="location.href='asset_tracking.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+Asset Tracking
+</button>
+
+<button class="nav-item" onclick="location.href='asset_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+Asset Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_verify.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M14 20h3M20 14v3M20 20v.01"/></svg>
+Verify Asset
+</button>
+
+<button class="nav-item" onclick="location.href='location_inspection.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="11" r="2.4"/></svg>
+Location Inspection
+</button>
+
+<button class="nav-item" onclick="location.href='asset_utilization.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+Asset Utilization
+</button>
+
+</nav>
+
+<div class="sidebar-footer">
+
+<button class="nav-item" onclick="location.href='department_dashboard.html'">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+Department Home
+</button>
+
+<button class="nav-item" onclick="logout()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+Logout
+</button>
+
+</div>
+
+</aside>
+
+<main class="main">
+
+<h1 class="page-title">Edit Asset</h1>
+
+<form id="editForm">
+
+<div class="content-card">
+
+<div class="photo-preview">
+<img id="previewImage" src="../images/no-image.png">
+</div>
+
+<div class="form-grid">
+
+<div>
+<label>Asset ID</label>
+<input type="text" id="assetID" readonly>
+</div>
+
+<div>
+<label>Asset Name *</label>
+<input type="text" id="assetName">
+</div>
+
+<div>
+<label>Manufacturer</label>
+<input type="text" id="manufacturer">
+</div>
+
+<div>
+<label>Model</label>
+<input type="text" id="model">
+</div>
+
+<div>
+<label>Serial Number</label>
+<input type="text" id="serial">
+</div>
+
+<div>
+<label>Category</label>
+<input type="text" id="category">
+</div>
+
+<div>
+<label>Sub Category</label>
+<input type="text" id="subcategory">
+</div>
+
+<div>
+<label>Block</label>
+<input type="text" id="block">
+</div>
+
+<div>
+<label>Section</label>
+<input type="text" id="section">
+</div>
+
+<div>
+<label>Location</label>
+<input type="text" id="location">
+</div>
+
+<div>
+<label>Sub Location</label>
+<input type="text" id="subLocation">
+</div>
+
+<div>
+<label>Asset Type</label>
+<input type="text" id="assetType">
+</div>
+
+<div>
+<label>Custodian</label>
+<input type="text" id="custodian">
+</div>
+
+<div>
+<label>Used By</label>
+<input type="text" id="usedBy">
+</div>
+
+<div>
+<label>Status</label>
+<input type="text" id="status">
+</div>
+
+</div>
+
+</div>
+
+<div style="display:flex;gap:14px;margin-bottom:40px;">
+
+<button type="submit" class="btn btn-primary">💾 Save Changes</button>
+
+<button type="button" class="btn btn-secondary" onclick="location.href='asset_tracking.html'">Cancel</button>
+
+</div>
+
+</form>
+
+</main>
+
+<script src="../js/department_store.js"></script>
+<script src="../js/dept_edit_asset.js"></script>
+
+<script>
+
+document.getElementById("deptChip").textContent =
+    currentDept.code + " · " + currentDept.name;
+
+function comingSoon(){
+    alert("This feature isn't built yet. It's on the roadmap!");
+}
+
+function logout(){
+
+    if(confirm("Are you sure you want to logout?")){
+
+        localStorage.removeItem("Employee");
+        localStorage.removeItem("Username");
+        localStorage.removeItem("EmployeeID");
+        localStorage.removeItem("Department");
+        localStorage.removeItem("Role");
+
+        window.location.href = "../index.html";
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

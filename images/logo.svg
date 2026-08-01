@@ -1,0 +1,21 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+<linearGradient id="hamsBadge" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#17456B"/>
+<stop offset="1" stop-color="#0F2A4A"/>
+</linearGradient>
+</defs>
+
+<!-- Badge -->
+<rect x="4" y="4" width="56" height="56" rx="16" fill="url(#hamsBadge)"/>
+
+<!-- Pulse-line H monogram -->
+<rect x="16" y="15" width="6" height="34" rx="3" fill="#FFFFFF"/>
+<rect x="42" y="15" width="6" height="34" rx="3" fill="#FFFFFF"/>
+<path d="M22 32H28L31 21L34 43L37 32H42" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+<!-- Asset-tag scan-corner accent -->
+<path d="M48 11H55V18" fill="none" stroke="#E29A3C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+</svg>
