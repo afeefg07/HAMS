@@ -85,27 +85,28 @@ document.addEventListener("DOMContentLoaded", function(){
         hamsGoBack();
     };
 
-    /* Button appearance */
-    backButton.style.position = "fixed";
-    backButton.style.top = "15px";
-    backButton.style.right = "15px";
-    backButton.style.left = "auto";
-    backButton.style.zIndex = "99999";
+  /* Button appearance */
 
-    backButton.style.padding = "9px 16px";
-    backButton.style.border = "none";
-    backButton.style.borderRadius = "8px";
+backButton.className = "hams-global-back-button";
 
-    backButton.style.background = "#173A5E";
-    backButton.style.color = "#ffffff";
+backButton.style.position = "fixed";
+backButton.style.top = "70px";
+backButton.style.right = "20px";
+backButton.style.left = "auto";
+backButton.style.zIndex = "999999";
 
-    backButton.style.fontSize = "14px";
-    backButton.style.fontWeight = "600";
+backButton.style.padding = "9px 16px";
+backButton.style.border = "none";
+backButton.style.borderRadius = "8px";
 
-    backButton.style.cursor = "pointer";
-    backButton.style.boxShadow =
-        "0 2px 6px rgba(0,0,0,0.20)";
+backButton.style.background = "#173A5E";
+backButton.style.color = "#ffffff";
 
-    document.body.appendChild(backButton);
+backButton.style.fontSize = "14px";
+backButton.style.fontWeight = "600";
 
-});
+backButton.style.cursor = "pointer";
+backButton.style.boxShadow =
+    "0 2px 6px rgba(0,0,0,0.20)";
+
+document.body.appendChild(backButton);
