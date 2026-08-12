@@ -32,3 +32,79 @@ function hamsInspectionCount(){
  return hamsGetInspections().filter(i=>ids.has(i.assetID)).length
 }
 function hamsIssueCount(){return hamsGetIssues().filter(i=>i.status!=="Closed").length}
+
+
+
+/* =========================================
+   HAMS GLOBAL BACK NAVIGATION
+   ========================================= */
+
+function hamsGoBack(){
+
+    // Try to return to the previous HAMS page
+    if(document.referrer &&
+       document.referrer.includes(window.location.origin)){
+
+        history.back();
+        return;
+    }
+
+    // If there is no previous HAMS page,
+    // return safely to the dashboard
+    window.location.href = "dashboard.html";
+}
+
+
+/* Add a Back button automatically to HAMS pages */
+document.addEventListener("DOMContentLoaded", function(){
+
+    // Do not add Back button to login page
+    const currentPage =
+        window.location.pathname.split("/").pop().toLowerCase();
+
+    if(
+        currentPage === "" ||
+        currentPage === "index.html" ||
+        currentPage === "login.html"
+    ){
+        return;
+    }
+
+    // Prevent duplicate buttons
+    if(document.getElementById("hamsGlobalBackButton")){
+        return;
+    }
+
+    const backButton = document.createElement("button");
+
+    backButton.id = "hamsGlobalBackButton";
+    backButton.type = "button";
+    backButton.innerHTML = "← Back";
+
+    backButton.onclick = function(){
+        hamsGoBack();
+    };
+
+    /* Button appearance */
+    backButton.style.position = "fixed";
+    backButton.style.top = "15px";
+    backButton.style.left = "15px";
+    backButton.style.zIndex = "99999";
+
+    backButton.style.padding = "9px 16px";
+    backButton.style.border = "none";
+    backButton.style.borderRadius = "8px";
+
+    backButton.style.background = "#173A5E";
+    backButton.style.color = "#ffffff";
+
+    backButton.style.fontSize = "14px";
+    backButton.style.fontWeight = "600";
+
+    backButton.style.cursor = "pointer";
+    backButton.style.boxShadow =
+        "0 2px 6px rgba(0,0,0,0.20)";
+
+    document.body.appendChild(backButton);
+
+});
