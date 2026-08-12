@@ -88,7 +88,8 @@ document.addEventListener("DOMContentLoaded", function(){
     /* Button appearance */
     backButton.style.position = "fixed";
     backButton.style.top = "15px";
-    backButton.style.left = "15px";
+    backButton.style.right = "15px";
+    backButton.style.left = "auto";
     backButton.style.zIndex = "99999";
 
     backButton.style.padding = "9px 16px";
